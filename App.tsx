@@ -10,23 +10,22 @@ const SAMPLE_TEXT = "I was went to the store yesterday to buy some apple's. The 
 const PATH_MAP: Record<string, string> = {
   '/': 'home',
   '/grammar-checker': 'grammar',
-  '/paraphrasing-tool': 'paraphrasing',
-  '/plagiarism-checker': 'plagiarism',
-  '/ai-writer': 'aiwriter',
-  '/summarizer': 'summarizer',
-  '/citation-generator': 'citation',
-  '/word-counter': 'wordcounter',
-  '/translator': 'translator',
-  '/for-teams': 'teams',
+  '/spell-checker': 'spell',
+  '/dictionary': 'dictionary',
+  '/blog': 'blog',
+  '/writing-tips': 'tips',
+  '/phrase-of-the-day': 'phrase',
+  '/misspelled-words': 'misspelled',
+  '/confused-words': 'confused',
+  '/quiz': 'quiz',
   '/pricing': 'pricing',
+  '/login': 'login',
+  '/signup': 'signup',
   '/about-us': 'about',
   '/careers': 'careers',
   '/partners': 'partners',
   '/privacy-policy': 'privacy',
   '/terms-of-service': 'terms',
-  '/cookie-policy': 'cookies',
-  '/login': 'login',
-  '/signup': 'signup',
 };
 
 const GenerateIcon = ({ className }: { className?: string }) => (
@@ -54,64 +53,105 @@ const Header = ({ onNavigate, currentPage }: { onNavigate: (path: string) => voi
     </div>
   );
 
-  const DropdownLink = ({ to, label, desc }: { to: string, label: string, desc: string }) => (
+  const DropdownLink = ({ to, label }: { to: string, label: string }) => (
     <button onClick={() => { onNavigate(to); setMobileMenuOpen(false); }} className="w-full text-left p-3 hover:bg-slate-50 rounded-xl transition-colors group/link">
-      <div className="text-[13px] font-semibold text-slate-800 group-hover/link:text-emerald-600">{label}</div>
-      <div className="text-[11px] text-slate-400 font-medium">{desc}</div>
+      <div className="text-[14px] font-semibold text-slate-800 group-hover/link:text-emerald-600">{label}</div>
     </button>
   );
 
   return (
     <header className={`${isHome ? 'bg-transparent' : 'bg-white/80 backdrop-blur-md border-b border-slate-100 shadow-sm'} sticky top-0 z-[100] h-20 flex items-center transition-all duration-300`}>
       <div className="max-w-7xl mx-auto w-full px-6 flex items-center justify-between">
-        <div className="flex items-center gap-12">
+        <div className="flex items-center gap-8">
           <div onClick={() => onNavigate('/')} className="flex items-center gap-2 cursor-pointer group">
-            <div className={`rounded-xl flex items-center justify-center transition-transform group-hover:scale-105`}>
-              <GenerateIcon className="w-7 h-7 text-black" />
-            </div>
+            <GenerateIcon className="w-7 h-7 text-black transition-transform group-hover:scale-110" />
             <span className={`text-2xl font-bold tracking-tight ${isHome ? 'text-slate-900' : 'text-slate-800'}`}>outparse</span>
           </div>
           
-          <nav className="hidden lg:flex items-center gap-9">
-            <NavItem label="Platform">
-              <DropdownLink to="/grammar-checker" label="Grammar Checker" desc="AI-powered error detection" />
-              <DropdownLink to="/paraphrasing-tool" label="Paraphrasing Tool" desc="Rephrase sentences instantly" />
-              <DropdownLink to="/plagiarism-checker" label="Plagiarism Checker" desc="Scan for duplicate content" />
+          {/* Desktop Navigation Items */}
+          <nav className="hidden lg:flex items-center gap-7">
+            <NavItem label="Features">
+              <DropdownLink to="/grammar-checker" label="Grammar checker" />
+              <DropdownLink to="/spell-checker" label="Spell checker" />
+              <DropdownLink to="/dictionary" label="Dictionary" />
             </NavItem>
-            <NavItem label="Solutions">
-              <DropdownLink to="/summarizer" label="Summarizer" desc="Condense long texts fast" />
-              <DropdownLink to="/translator" label="Translator" desc="Localize your writing" />
+            <NavItem label="Resources">
+              <DropdownLink to="/blog" label="Blog" />
+              <DropdownLink to="/writing-tips" label="Writing Tips" />
+              <DropdownLink to="/phrase-of-the-day" label="Phrase of the Day" />
+              <DropdownLink to="/misspelled-words" label="Misspelled Words" />
+              <DropdownLink to="/confused-words" label="Confused Words" />
+              <DropdownLink to="/quiz" label="Quiz" />
             </NavItem>
             <button onClick={() => onNavigate('/pricing')} className={`text-[15px] font-medium transition-colors ${isHome ? 'text-slate-800 hover:text-emerald-700' : 'text-slate-600 hover:text-emerald-600'}`}>Pricing</button>
-            <NavItem label="Resources">
-              <DropdownLink to="/about-us" label="Blog" desc="Editorial insights" />
-              <DropdownLink to="/careers" label="Careers" desc="Join the team" />
-            </NavItem>
           </nav>
         </div>
 
-        <div className="flex items-center gap-6">
-          <button onClick={() => onNavigate('/login')} className={`hidden sm:block text-[15px] font-medium transition-colors ${isHome ? 'text-slate-800 hover:text-emerald-700' : 'text-slate-600 hover:text-emerald-600'}`}>Sign in</button>
-          <button onClick={() => onNavigate('/signup')} className={`px-7 py-3 font-semibold text-[14px] rounded-full transition-all ${isHome ? 'bg-slate-900 text-white hover:bg-black' : 'bg-emerald-600 text-white hover:bg-emerald-700'}`}>Sign up</button>
-          
-          <button 
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className={`lg:hidden p-2 rounded-lg ${isHome ? 'text-slate-800 hover:bg-black/5' : 'text-slate-600 hover:bg-slate-50'}`}
-          >
-            <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={mobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
-            </svg>
-          </button>
+        <div className="flex items-center gap-4">
+          {/* Tablet & Desktop Actions */}
+          <div className="hidden md:flex items-center gap-4">
+            <button onClick={() => onNavigate('/login')} className={`text-[15px] font-medium transition-colors ${isHome ? 'text-slate-800 hover:text-emerald-700' : 'text-slate-600 hover:text-emerald-600'}`}>Log in</button>
+            <button onClick={() => onNavigate('/signup')} className={`px-7 py-3 font-semibold text-[14px] rounded-full transition-all ${isHome ? 'bg-slate-900 text-white hover:bg-black' : 'bg-emerald-600 text-white hover:bg-emerald-700'}`}>Sign up</button>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={() => setMobileMenuOpen(true)}
+              className={`lg:hidden p-2 rounded-lg ${isHome ? 'text-slate-800 hover:bg-black/5' : 'text-slate-600 hover:bg-slate-50'}`}
+            >
+              <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+            
+            <div className="md:hidden">
+                <button onClick={() => onNavigate('/signup')} className={`px-5 py-2.5 font-semibold text-[13px] rounded-full transition-all ${isHome ? 'bg-slate-900 text-white hover:bg-black' : 'bg-emerald-600 text-white hover:bg-emerald-700'}`}>Sign up</button>
+            </div>
+          </div>
         </div>
       </div>
       
       {mobileMenuOpen && (
-        <div className="absolute top-20 left-0 w-full bg-white border-b border-slate-100 p-8 flex flex-col gap-6 lg:hidden shadow-2xl animate-in slide-in-from-top-2">
-          <button onClick={() => { onNavigate('/grammar-checker'); setMobileMenuOpen(false); }} className="text-left text-[18px] font-semibold text-slate-800">Grammar Checker</button>
-          <button onClick={() => { onNavigate('/paraphrasing-tool'); setMobileMenuOpen(false); }} className="text-left text-[18px] font-semibold text-slate-800">Paraphrasing Tool</button>
-          <button onClick={() => { onNavigate('/pricing'); setMobileMenuOpen(false); }} className="text-left text-[18px] font-semibold text-slate-800 border-b border-slate-50 pb-6">Pricing</button>
-          <button onClick={() => { onNavigate('/login'); setMobileMenuOpen(false); }} className="w-full py-4 text-slate-600 font-semibold border border-slate-200 rounded-2xl">Sign in</button>
-          <button onClick={() => { onNavigate('/signup'); setMobileMenuOpen(false); }} className="w-full py-4 bg-emerald-600 text-white font-semibold rounded-2xl">Sign up</button>
+        <div className="fixed inset-0 bg-white z-[200] p-8 flex flex-col overflow-y-auto animate-in fade-in zoom-in-95 duration-200">
+          <div className="flex items-center justify-between mb-12">
+            <div onClick={() => { onNavigate('/'); setMobileMenuOpen(false); }} className="flex items-center gap-2 cursor-pointer">
+              <GenerateIcon className="w-7 h-7 text-black" />
+              <span className="text-2xl font-bold tracking-tight text-slate-900">outparse</span>
+            </div>
+            <button onClick={() => setMobileMenuOpen(false)} className="p-2 text-slate-400 hover:text-slate-900">
+              <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          <div className="space-y-12">
+            <section>
+              <h3 className="text-[14px] font-bold text-slate-400 uppercase tracking-widest mb-6">Features</h3>
+              <div className="grid gap-4">
+                <button onClick={() => { onNavigate('/grammar-checker'); setMobileMenuOpen(false); }} className="text-left text-xl font-bold text-slate-900">Grammar checker</button>
+                <button onClick={() => { onNavigate('/spell-checker'); setMobileMenuOpen(false); }} className="text-left text-xl font-bold text-slate-900">Spell checker</button>
+                <button onClick={() => { onNavigate('/dictionary'); setMobileMenuOpen(false); }} className="text-left text-xl font-bold text-slate-900">Dictionary</button>
+              </div>
+            </section>
+            <section>
+              <h3 className="text-[14px] font-bold text-slate-400 uppercase tracking-widest mb-6">Resources</h3>
+              <div className="grid gap-4">
+                <button onClick={() => { onNavigate('/blog'); setMobileMenuOpen(false); }} className="text-left text-xl font-bold text-slate-900">Blog</button>
+                <button onClick={() => { onNavigate('/writing-tips'); setMobileMenuOpen(false); }} className="text-left text-xl font-bold text-slate-900">Writing Tips</button>
+                <button onClick={() => { onNavigate('/phrase-of-the-day'); setMobileMenuOpen(false); }} className="text-left text-xl font-bold text-slate-900">Phrase of the Day</button>
+                <button onClick={() => { onNavigate('/misspelled-words'); setMobileMenuOpen(false); }} className="text-left text-xl font-bold text-slate-900">Misspelled Words</button>
+                <button onClick={() => { onNavigate('/confused-words'); setMobileMenuOpen(false); }} className="text-left text-xl font-bold text-slate-900">Confused Words</button>
+                <button onClick={() => { onNavigate('/quiz'); setMobileMenuOpen(false); }} className="text-left text-xl font-bold text-slate-900">Quiz</button>
+              </div>
+            </section>
+            <button onClick={() => { onNavigate('/pricing'); setMobileMenuOpen(false); }} className="text-left text-xl font-bold text-slate-900 py-4 border-t border-slate-100 w-full">Pricing</button>
+          </div>
+
+          <div className="mt-auto pt-10 border-t border-slate-100 flex flex-col gap-4">
+            <button onClick={() => { onNavigate('/login'); setMobileMenuOpen(false); }} className="w-full py-4 text-slate-600 font-bold border border-slate-200 rounded-2xl">Log in</button>
+            <button onClick={() => { onNavigate('/signup'); setMobileMenuOpen(false); }} className="w-full py-4 bg-emerald-600 text-white font-bold rounded-2xl shadow-xl shadow-emerald-600/20">Sign up</button>
+          </div>
         </div>
       )}
     </header>
@@ -192,7 +232,7 @@ const FeatureSection = ({ title, description, category, original, replacement, e
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
       }`}
     >
-      <div className={`max-w-7xl mx-auto px-8 flex flex-col ${reverse ? 'lg:flex-row-reverse' : 'lg:flex-row'} items-center gap-20`}>
+      <div className={`max-w-7xl mx-auto px-8 flex flex-col md:flex-row ${reverse ? 'md:flex-row-reverse' : ''} items-center gap-16 lg:gap-20`}>
         <div className="flex-1 space-y-8">
           <h2 className="text-4xl font-extrabold text-slate-900 leading-[1.1] tracking-tight">{title}</h2>
           <p className="text-xl text-slate-500 leading-relaxed font-medium">{description}</p>
@@ -219,7 +259,7 @@ const Footer = ({ onNavigate }: { onNavigate: (path: string) => void }) => {
 
   const FooterHeading = ({ title, id }: { title: string, id: string }) => (
     <div className="flex items-center justify-between md:block py-4 md:py-0 border-b border-slate-200/20 md:border-0 cursor-pointer md:cursor-default" onClick={() => toggle(id)}>
-      <h4 className="text-[15px] font-semibold text-slate-900 uppercase tracking-wider">{title}</h4>
+      <h4 className="text-[14px] font-bold text-slate-900 tracking-wider">{title}</h4>
       <span className="md:hidden text-slate-600 font-medium text-xl">
         <svg className={`w-5 h-5 transition-transform duration-300 ${openSection === id ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
@@ -237,7 +277,7 @@ const Footer = ({ onNavigate }: { onNavigate: (path: string) => void }) => {
   return (
     <footer className="bg-slate-100 text-slate-900 pt-24 pb-12">
       <div className="max-w-7xl mx-auto px-8">
-        <div className="grid grid-cols-1 md:grid-cols-6 gap-10 md:gap-16 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-10 md:gap-16 mb-24">
           <div className="col-span-1 md:col-span-2 space-y-8">
             <div onClick={() => onNavigate('/')} className="flex items-center gap-2 cursor-pointer">
               <GenerateIcon className="w-7 h-7 text-black" />
@@ -265,38 +305,27 @@ const Footer = ({ onNavigate }: { onNavigate: (path: string) => void }) => {
           <div>
             <FooterHeading title="Company" id="company" />
             <FooterLinks id="company">
-              <li><button onClick={() => onNavigate('/about-us')} className="text-[15px] font-normal text-slate-600 hover:text-slate-900 transition-colors">About us</button></li>
-              <li><button onClick={() => onNavigate('/careers')} className="text-[15px] font-normal text-slate-600 hover:text-slate-900 transition-colors">Careers</button></li>
-              <li><button onClick={() => onNavigate('/partners')} className="text-[15px] font-normal text-slate-600 hover:text-slate-900 transition-colors">Partners</button></li>
+              <li><button onClick={() => onNavigate('/about-us')} className="text-[14px] font-medium text-slate-600 hover:text-slate-900 transition-colors">About us</button></li>
+              <li><button onClick={() => onNavigate('/careers')} className="text-[14px] font-medium text-slate-600 hover:text-slate-900 transition-colors">Careers</button></li>
+              <li><button onClick={() => onNavigate('/partners')} className="text-[14px] font-medium text-slate-600 hover:text-slate-900 transition-colors">Partners</button></li>
             </FooterLinks>
           </div>
           
           <div>
             <FooterHeading title="Product" id="product" />
             <FooterLinks id="product">
-              <li><button onClick={() => onNavigate('/grammar-checker')} className="text-[15px] font-normal text-slate-600 hover:text-slate-900 transition-colors">Grammar</button></li>
-              <li><button onClick={() => onNavigate('/paraphrasing-tool')} className="text-[15px] font-normal text-slate-600 hover:text-slate-900 transition-colors">Paraphrasing</button></li>
-              <li><button onClick={() => onNavigate('/pricing')} className="text-[15px] font-normal text-slate-600 hover:text-slate-900 transition-colors">Pricing</button></li>
+              <li><button onClick={() => onNavigate('/grammar-checker')} className="text-[14px] font-medium text-slate-600 hover:text-slate-900 transition-colors">Grammar checker</button></li>
+              <li><button onClick={() => onNavigate('/spell-checker')} className="text-[14px] font-medium text-slate-600 hover:text-slate-900 transition-colors">Spell checker</button></li>
+              <li><button onClick={() => onNavigate('/pricing')} className="text-[14px] font-medium text-slate-600 hover:text-slate-900 transition-colors">Pricing</button></li>
             </FooterLinks>
           </div>
 
           <div>
             <FooterHeading title="Legal" id="legal" />
             <FooterLinks id="legal">
-              <li><button onClick={() => onNavigate('/privacy-policy')} className="text-[15px] font-normal text-slate-600 hover:text-slate-900 transition-colors">Privacy policy</button></li>
-              <li><button onClick={() => onNavigate('/terms-of-service')} className="text-[15px] font-normal text-slate-600 hover:text-slate-900 transition-colors">Terms of service</button></li>
+              <li><button onClick={() => onNavigate('/privacy-policy')} className="text-[14px] font-medium text-slate-600 hover:text-slate-900 transition-colors">Privacy policy</button></li>
+              <li><button onClick={() => onNavigate('/terms-of-service')} className="text-[14px] font-medium text-slate-600 hover:text-slate-900 transition-colors">Terms of service</button></li>
             </FooterLinks>
-          </div>
-
-          <div className="col-span-1 md:col-span-1">
-            <FooterHeading title="Newsletter" id="newsletter" />
-            <div className={`pt-4 md:pt-8 space-y-4 ${openSection === 'newsletter' ? 'block' : 'hidden md:block'}`}>
-              <p className="text-[13px] text-slate-500 font-medium">Get writing tips and product updates.</p>
-              <div className="flex flex-col gap-2">
-                <input type="email" placeholder="Email address" className="bg-white border border-slate-200 rounded-xl px-4 py-2 text-[14px] focus:outline-none focus:ring-2 focus:ring-emerald-500/20" />
-                <button className="bg-slate-900 text-white rounded-xl py-2 px-4 text-[13px] font-bold hover:bg-black transition-all">Subscribe</button>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -481,9 +510,9 @@ const App: React.FC = () => {
         return (
           <>
             <main className="brand-gradient min-h-[90vh] flex items-center relative overflow-hidden pb-20">
-              <div className="max-w-7xl mx-auto px-8 w-full grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-center relative z-10">
+              <div className="max-w-7xl mx-auto px-8 w-full grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-24 items-center relative z-10">
                 
-                <div className="space-y-8 reveal delay-1 py-10 lg:py-0">
+                <div className="space-y-8 reveal delay-1 py-10 md:py-0">
                   <h1 className="text-6xl md:text-7xl lg:text-8xl font-extrabold text-slate-900 tracking-tighter leading-[1] drop-shadow-sm">
                     Grammar checking
                   </h1>
@@ -493,7 +522,7 @@ const App: React.FC = () => {
                 </div>
 
                 <div className="w-full reveal delay-3">
-                  <div className={`overflow-hidden rounded-[25px] shadow-[0_60px_100px_-20px_rgba(0,0,0,0.1)] transition-all duration-300 ${isLoading ? 'check-gradient-border' : ''}`}>
+                  <div className={`overflow-hidden rounded-[25px] shadow-2xl transition-all duration-300 ${isLoading ? 'check-gradient-border' : ''}`}>
                     <div className={`${isLoading ? 'check-gradient-inner rounded-[22px]' : ''}`}>
                       <Editor 
                         value={inputText} onChange={setInputText} isLoading={isLoading} 
@@ -504,7 +533,7 @@ const App: React.FC = () => {
                         onApplySuggestion={applySingleSuggestion}
                         onIgnoreSuggestion={(s) => setResult(p => p ? {...p, suggestions: p.suggestions.filter(i => i.id !== s.id)} : null)}
                       />
-                      <div className="px-8 py-7 bg-slate-50 border-t border-slate-100 flex items-center justify-between flex-wrap gap-4">
+                      <div className="px-8 py-7 bg-white border-t border-slate-100 flex items-center justify-between flex-wrap gap-4 rounded-b-[25px]">
                         <div className="flex items-center gap-2">
                           <button 
                             onClick={handleToggleReadAloud} 
@@ -600,6 +629,17 @@ const App: React.FC = () => {
                 explanation="Conciseness: Streamlined the sentence to be more direct and impactful."
               />
             </div>
+
+            <section className="bg-emerald-600 py-24">
+              <div className="max-w-4xl mx-auto px-8 text-center space-y-8">
+                <h2 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight">Writing tips and product updates</h2>
+                <p className="text-emerald-50 text-xl font-medium">Join 100,000+ writers receiving our weekly editorial insights.</p>
+                <div className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
+                  <input type="email" placeholder="Email address" className="flex-1 px-8 py-4 rounded-full border-none focus:ring-4 focus:ring-white/20 text-lg shadow-xl" />
+                  <button className="px-10 py-4 bg-slate-900 text-white font-bold rounded-full hover:bg-black transition-all text-lg shadow-xl">Subscribe</button>
+                </div>
+              </div>
+            </section>
           </>
         );
       case 'pricing':

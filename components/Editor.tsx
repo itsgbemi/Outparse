@@ -110,9 +110,9 @@ const Editor: React.FC<EditorProps> = ({
   const toneOptions: EditorialTone[] = ['Professional', 'Casual', 'Academic', 'Creative', 'Urgent'];
 
   return (
-    <div className="relative flex-1 flex flex-col min-h-[550px] bg-white rounded-[12px]">
+    <div className="relative flex-1 flex flex-col min-h-[450px] bg-white rounded-t-[22px]">
       {/* Top Bar - Enhanced Pill Selects */}
-      <div className="flex items-center justify-between px-8 py-5 border-b border-slate-100 bg-white z-10 flex-wrap gap-4">
+      <div className="flex items-center justify-between px-8 py-5 border-b border-slate-100 bg-white z-10 flex-wrap gap-4 rounded-t-[22px]">
         <div className="flex items-center gap-4 flex-wrap">
           {/* Language Selector with CIRCLE Flag */}
           <div className="relative group">
@@ -157,7 +157,7 @@ const Editor: React.FC<EditorProps> = ({
         )}
       </div>
 
-      <div className="flex-1 relative bg-white overflow-hidden rounded-b-[12px]">
+      <div className="flex-1 relative bg-white overflow-hidden">
         <div 
           ref={backdropRef}
           className="absolute inset-0 p-10 text-[18px] font-normal leading-[1.8] text-transparent whitespace-pre-wrap break-words pointer-events-none overflow-auto select-none"
