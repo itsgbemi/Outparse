@@ -38,6 +38,15 @@ const GenerateIcon = ({ className }: { className?: string }) => (
 
 const Header = ({ onNavigate, currentPage }: { onNavigate: (path: string) => void, currentPage: string }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [expandedSection, setExpandedSection] = useState<string | null>(null);
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const isHome = currentPage === '/';
 
   const NavItem = ({ label, children }: { label: string, children?: React.ReactNode }) => (
@@ -60,15 +69,14 @@ const Header = ({ onNavigate, currentPage }: { onNavigate: (path: string) => voi
   );
 
   return (
-    <header className={`${isHome ? 'bg-transparent' : 'bg-white/80 backdrop-blur-md border-b border-slate-100 shadow-sm'} sticky top-0 z-[100] h-20 flex items-center transition-all duration-300`}>
+    <header className={`fixed top-0 left-0 right-0 z-[100] h-20 flex items-center transition-all duration-300 ${isScrolled ? 'bg-white/70 backdrop-blur-xl border-b border-white/20 shadow-sm' : 'bg-transparent'}`}>
       <div className="max-w-7xl mx-auto w-full px-6 flex items-center justify-between">
         <div className="flex items-center gap-8">
-          <div onClick={() => onNavigate('/')} className="flex items-center gap-2 cursor-pointer group">
+          <div onClick={() => { onNavigate('/'); setMobileMenuOpen(false); }} className="flex items-center gap-2 cursor-pointer group">
             <GenerateIcon className="w-7 h-7 text-black transition-transform group-hover:scale-110" />
-            <span className={`text-2xl font-bold tracking-tight ${isHome ? 'text-slate-900' : 'text-slate-800'}`}>outparse</span>
+            <span className={`text-2xl font-bold tracking-tight text-slate-900`}>outparse</span>
           </div>
           
-          {/* Desktop Navigation Items */}
           <nav className="hidden lg:flex items-center gap-7">
             <NavItem label="Features">
               <DropdownLink to="/grammar-checker" label="Grammar checker" />
@@ -83,74 +91,75 @@ const Header = ({ onNavigate, currentPage }: { onNavigate: (path: string) => voi
               <DropdownLink to="/confused-words" label="Confused Words" />
               <DropdownLink to="/quiz" label="Quiz" />
             </NavItem>
-            <button onClick={() => onNavigate('/pricing')} className={`text-[15px] font-medium transition-colors ${isHome ? 'text-slate-800 hover:text-emerald-700' : 'text-slate-600 hover:text-emerald-600'}`}>Pricing</button>
+            <button onClick={() => onNavigate('/pricing')} className={`text-[15px] font-medium transition-colors text-slate-800 hover:text-emerald-700`}>Pricing</button>
           </nav>
         </div>
 
         <div className="flex items-center gap-4">
-          {/* Tablet & Desktop Actions */}
           <div className="hidden md:flex items-center gap-4">
-            <button onClick={() => onNavigate('/login')} className={`text-[15px] font-medium transition-colors ${isHome ? 'text-slate-800 hover:text-emerald-700' : 'text-slate-600 hover:text-emerald-600'}`}>Log in</button>
-            <button onClick={() => onNavigate('/signup')} className={`px-7 py-3 font-semibold text-[14px] rounded-full transition-all ${isHome ? 'bg-slate-900 text-white hover:bg-black' : 'bg-emerald-600 text-white hover:bg-emerald-700'}`}>Sign up</button>
+            <button onClick={() => onNavigate('/login')} className={`text-[15px] font-medium transition-colors text-slate-800 hover:text-emerald-700`}>Log in</button>
+            <button onClick={() => onNavigate('/signup')} className={`px-7 py-3 font-semibold text-[14px] rounded-full transition-all bg-emerald-600 text-white hover:bg-emerald-700`}>Sign up</button>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 lg:hidden">
+            <div className="md:hidden">
+                <button onClick={() => onNavigate('/signup')} className={`px-5 py-2.5 font-semibold text-[13px] rounded-full transition-all bg-emerald-600 text-white hover:bg-emerald-700`}>Sign up</button>
+            </div>
             <button 
-              onClick={() => setMobileMenuOpen(true)}
-              className={`lg:hidden p-2 rounded-lg ${isHome ? 'text-slate-800 hover:bg-black/5' : 'text-slate-600 hover:bg-slate-50'}`}
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className={`p-2 rounded-lg text-slate-800 hover:bg-black/5 transition-colors`}
             >
               <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={mobileMenuOpen ? "M6 18L18 6" : "M4 6h16M4 12h16M4 18h16"} />
               </svg>
             </button>
-            
-            <div className="md:hidden">
-                <button onClick={() => onNavigate('/signup')} className={`px-5 py-2.5 font-semibold text-[13px] rounded-full transition-all ${isHome ? 'bg-slate-900 text-white hover:bg-black' : 'bg-emerald-600 text-white hover:bg-emerald-700'}`}>Sign up</button>
-            </div>
           </div>
         </div>
       </div>
       
+      {/* Mobile/Tablet Menu - Opens Under Header */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 bg-white z-[200] p-8 flex flex-col overflow-y-auto animate-in fade-in zoom-in-95 duration-200">
-          <div className="flex items-center justify-between mb-12">
-            <div onClick={() => { onNavigate('/'); setMobileMenuOpen(false); }} className="flex items-center gap-2 cursor-pointer">
-              <GenerateIcon className="w-7 h-7 text-black" />
-              <span className="text-2xl font-bold tracking-tight text-slate-900">outparse</span>
-            </div>
-            <button onClick={() => setMobileMenuOpen(false)} className="p-2 text-slate-400 hover:text-slate-900">
-              <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
+        <div className="absolute top-20 left-0 right-0 bg-white border-b border-slate-100 shadow-2xl p-6 lg:hidden flex flex-col gap-2 max-h-[calc(100vh-5rem)] overflow-y-auto animate-in slide-in-from-top-2 duration-300">
+          <div>
+            <button 
+              onClick={() => setExpandedSection(expandedSection === 'features' ? null : 'features')}
+              className="w-full flex items-center justify-between py-4 text-lg font-bold text-slate-900 px-2"
+            >
+              Features <svg className={`w-5 h-5 transition-transform ${expandedSection === 'features' ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" /></svg>
             </button>
+            {expandedSection === 'features' && (
+              <div className="pl-4 pb-2 space-y-1">
+                <DropdownLink to="/grammar-checker" label="Grammar checker" />
+                <DropdownLink to="/spell-checker" label="Spell checker" />
+                <DropdownLink to="/dictionary" label="Dictionary" />
+              </div>
+            )}
           </div>
 
-          <div className="space-y-12">
-            <section>
-              <h3 className="text-[14px] font-bold text-slate-400 uppercase tracking-widest mb-6">Features</h3>
-              <div className="grid gap-4">
-                <button onClick={() => { onNavigate('/grammar-checker'); setMobileMenuOpen(false); }} className="text-left text-xl font-bold text-slate-900">Grammar checker</button>
-                <button onClick={() => { onNavigate('/spell-checker'); setMobileMenuOpen(false); }} className="text-left text-xl font-bold text-slate-900">Spell checker</button>
-                <button onClick={() => { onNavigate('/dictionary'); setMobileMenuOpen(false); }} className="text-left text-xl font-bold text-slate-900">Dictionary</button>
+          <div>
+            <button 
+              onClick={() => setExpandedSection(expandedSection === 'resources' ? null : 'resources')}
+              className="w-full flex items-center justify-between py-4 text-lg font-bold text-slate-900 px-2"
+            >
+              Resources <svg className={`w-5 h-5 transition-transform ${expandedSection === 'resources' ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" /></svg>
+            </button>
+            {expandedSection === 'resources' && (
+              <div className="pl-4 pb-2 space-y-1">
+                <DropdownLink to="/blog" label="Blog" />
+                <DropdownLink to="/writing-tips" label="Writing Tips" />
+                <DropdownLink to="/phrase-of-the-day" label="Phrase of the Day" />
+                <DropdownLink to="/misspelled-words" label="Misspelled Words" />
+                <DropdownLink to="/confused-words" label="Confused Words" />
+                <DropdownLink to="/quiz" label="Quiz" />
               </div>
-            </section>
-            <section>
-              <h3 className="text-[14px] font-bold text-slate-400 uppercase tracking-widest mb-6">Resources</h3>
-              <div className="grid gap-4">
-                <button onClick={() => { onNavigate('/blog'); setMobileMenuOpen(false); }} className="text-left text-xl font-bold text-slate-900">Blog</button>
-                <button onClick={() => { onNavigate('/writing-tips'); setMobileMenuOpen(false); }} className="text-left text-xl font-bold text-slate-900">Writing Tips</button>
-                <button onClick={() => { onNavigate('/phrase-of-the-day'); setMobileMenuOpen(false); }} className="text-left text-xl font-bold text-slate-900">Phrase of the Day</button>
-                <button onClick={() => { onNavigate('/misspelled-words'); setMobileMenuOpen(false); }} className="text-left text-xl font-bold text-slate-900">Misspelled Words</button>
-                <button onClick={() => { onNavigate('/confused-words'); setMobileMenuOpen(false); }} className="text-left text-xl font-bold text-slate-900">Confused Words</button>
-                <button onClick={() => { onNavigate('/quiz'); setMobileMenuOpen(false); }} className="text-left text-xl font-bold text-slate-900">Quiz</button>
-              </div>
-            </section>
-            <button onClick={() => { onNavigate('/pricing'); setMobileMenuOpen(false); }} className="text-left text-xl font-bold text-slate-900 py-4 border-t border-slate-100 w-full">Pricing</button>
+            )}
           </div>
 
-          <div className="mt-auto pt-10 border-t border-slate-100 flex flex-col gap-4">
+          <button onClick={() => { onNavigate('/pricing'); setMobileMenuOpen(false); }} className="text-left text-lg font-bold text-slate-900 py-4 px-2">Pricing</button>
+          
+          <div className="pt-6 mt-4 border-t border-slate-50 flex flex-col gap-3">
             <button onClick={() => { onNavigate('/login'); setMobileMenuOpen(false); }} className="w-full py-4 text-slate-600 font-bold border border-slate-200 rounded-2xl">Log in</button>
-            <button onClick={() => { onNavigate('/signup'); setMobileMenuOpen(false); }} className="w-full py-4 bg-emerald-600 text-white font-bold rounded-2xl shadow-xl shadow-emerald-600/20">Sign up</button>
+            <button onClick={() => { onNavigate('/signup'); setMobileMenuOpen(false); }} className="w-full py-4 bg-emerald-600 text-white font-bold rounded-2xl">Sign up</button>
           </div>
         </div>
       )}
@@ -159,7 +168,7 @@ const Header = ({ onNavigate, currentPage }: { onNavigate: (path: string) => voi
 };
 
 const PageContent = ({ title, desc, children }: { title: string, desc: string, children?: React.ReactNode }) => (
-  <div className="min-h-[60vh] bg-white py-24 px-6 reveal">
+  <div className="min-h-[60vh] py-24 px-6 reveal">
     <div className="max-w-4xl mx-auto space-y-10">
       <div className="space-y-5">
         <h1 className="text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">{title}</h1>
@@ -228,15 +237,15 @@ const FeatureSection = ({ title, description, category, original, replacement, e
   return (
     <section 
       ref={ref} 
-      className={`py-32 bg-white transition-all duration-1000 transform ${
+      className={`py-32 transition-all duration-1000 transform ${
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
       }`}
     >
       <div className={`max-w-7xl mx-auto px-8 flex flex-col md:flex-row ${reverse ? 'md:flex-row-reverse' : ''} items-center gap-16 lg:gap-20`}>
-        <div className="flex-1 space-y-8">
-          <h2 className="text-4xl font-extrabold text-slate-900 leading-[1.1] tracking-tight">{title}</h2>
+        <div className="flex-1 space-y-8 text-center md:text-left">
+          <h2 className="text-4xl lg:text-5xl font-extrabold text-slate-900 leading-[1.1] tracking-tight">{title}</h2>
           <p className="text-xl text-slate-500 leading-relaxed font-medium">{description}</p>
-          <button className="text-emerald-600 font-semibold text-[16px] flex items-center gap-3 group">
+          <button className="text-emerald-600 font-semibold text-[16px] flex items-center gap-3 group mx-auto md:mx-0">
             See {category.toLowerCase()} in action <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
           </button>
         </div>
@@ -259,7 +268,7 @@ const Footer = ({ onNavigate }: { onNavigate: (path: string) => void }) => {
 
   const FooterHeading = ({ title, id }: { title: string, id: string }) => (
     <div className="flex items-center justify-between md:block py-4 md:py-0 border-b border-slate-200/20 md:border-0 cursor-pointer md:cursor-default" onClick={() => toggle(id)}>
-      <h4 className="text-[14px] font-bold text-slate-900 tracking-wider">{title}</h4>
+      <h4 className="text-[14px] font-bold text-slate-900">{title}</h4>
       <span className="md:hidden text-slate-600 font-medium text-xl">
         <svg className={`w-5 h-5 transition-transform duration-300 ${openSection === id ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
@@ -509,19 +518,19 @@ const App: React.FC = () => {
       case 'home':
         return (
           <>
-            <main className="brand-gradient min-h-[90vh] flex items-center relative overflow-hidden pb-20">
-              <div className="max-w-7xl mx-auto px-8 w-full grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-24 items-center relative z-10">
+            <main className="min-h-[90vh] flex items-center relative overflow-hidden pt-20 pb-20">
+              <div className="max-w-7xl mx-auto px-8 w-full grid grid-cols-1 md:grid-cols-12 gap-16 lg:gap-24 items-center relative z-10">
                 
-                <div className="space-y-8 reveal delay-1 py-10 md:py-0">
+                <div className="md:col-span-5 space-y-8 reveal delay-1 py-10 md:py-0 text-center md:text-left">
                   <h1 className="text-6xl md:text-7xl lg:text-8xl font-extrabold text-slate-900 tracking-tighter leading-[1] drop-shadow-sm">
                     Grammar checking
                   </h1>
-                  <p className="text-slate-600/80 text-xl lg:text-2xl font-medium max-w-xl leading-relaxed">
+                  <p className="text-slate-600/80 text-xl lg:text-2xl font-medium max-w-xl leading-relaxed mx-auto md:mx-0">
                     Use Outparse to improve your writing, catch mistakes, and use best practices to write like a pro.
                   </p>
                 </div>
 
-                <div className="w-full reveal delay-3">
+                <div className="md:col-span-7 w-full reveal delay-3">
                   <div className={`overflow-hidden rounded-[25px] shadow-2xl transition-all duration-300 ${isLoading ? 'check-gradient-border' : ''}`}>
                     <div className={`${isLoading ? 'check-gradient-inner rounded-[22px]' : ''}`}>
                       <Editor 
@@ -602,7 +611,7 @@ const App: React.FC = () => {
               </div>
             </main>
 
-            <div className="bg-white">
+            <div className="bg-white/40">
               <FeatureSection 
                 title="Eliminate grammar mistakes instantly"
                 description="Our advanced neural networks detect complex grammatical errors that traditional checkers miss. From subject-verb agreement to nuanced punctuation, we ensure your text is technically flawless."
@@ -646,7 +655,7 @@ const App: React.FC = () => {
         return (
           <PageContent title="Simple, transparent pricing" desc="Choose the plan that's right for your writing goals.">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 py-16">
-              <div className="border border-slate-200 p-12 rounded-[48px] space-y-8 bg-slate-50 shadow-sm reveal">
+              <div className="border border-slate-200 p-12 rounded-[48px] space-y-8 bg-white/50 shadow-sm reveal">
                 <h3 className="text-3xl font-extrabold">Free</h3>
                 <p className="text-slate-500 text-lg">Essential tools for basic writing improvement.</p>
                 <div className="text-5xl font-extrabold">$0<span className="text-xl text-slate-400">/mo</span></div>
@@ -678,10 +687,8 @@ const App: React.FC = () => {
     }
   };
 
-  const isHome = currentPath === '/';
-
   return (
-    <div className={`min-h-screen flex flex-col ${isHome ? 'brand-gradient' : 'bg-white'}`}>
+    <div className={`min-h-screen flex flex-col brand-gradient`}>
       <Header onNavigate={handleNavigate} currentPage={currentPath} />
       {renderCurrentPage()}
       <Footer onNavigate={handleNavigate} />

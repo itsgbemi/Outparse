@@ -110,11 +110,10 @@ const Editor: React.FC<EditorProps> = ({
   const toneOptions: EditorialTone[] = ['Professional', 'Casual', 'Academic', 'Creative', 'Urgent'];
 
   return (
-    <div className="relative flex-1 flex flex-col min-h-[450px] bg-white rounded-t-[22px]">
+    <div className="relative flex-1 flex flex-col min-h-[350px] bg-white rounded-t-[25px]">
       {/* Top Bar - Enhanced Pill Selects */}
-      <div className="flex items-center justify-between px-8 py-5 border-b border-slate-100 bg-white z-10 flex-wrap gap-4 rounded-t-[22px]">
+      <div className="flex items-center justify-between px-8 py-5 border-b border-slate-100 bg-white z-10 flex-wrap gap-4 rounded-t-[25px]">
         <div className="flex items-center gap-4 flex-wrap">
-          {/* Language Selector with CIRCLE Flag */}
           <div className="relative group">
             <div className="flex items-center gap-2.5 bg-slate-50 border border-slate-200 rounded-full pl-1.5 pr-8 py-1.5 hover:border-indigo-300 hover:bg-white transition-all cursor-pointer shadow-sm">
               <div className="w-6 h-6 rounded-full overflow-hidden flex items-center justify-center bg-white border border-slate-100 text-[12px] leading-none select-none shadow-sm">
@@ -222,7 +221,7 @@ const Editor: React.FC<EditorProps> = ({
         )}
 
         {!value && (
-          <div className="absolute inset-x-0 top-[110px] flex justify-center pointer-events-none p-4">
+          <div className="absolute inset-x-0 top-[80px] flex justify-center pointer-events-none p-4">
             <div className="flex flex-row items-center gap-3 pointer-events-auto flex-wrap justify-center">
               <button 
                 onClick={onTrySample} 
