@@ -401,7 +401,7 @@ const App: React.FC = () => {
         return (
           <>
             <main className="min-h-[100vh] flex items-center relative overflow-hidden pt-48 pb-32">
-              <div className="max-w-[1400px] mx-auto px-8 md:px-20 lg:px-24 w-full grid grid-cols-1 md:grid-cols-12 gap-y-24 md:gap-x-32 items-center relative z-10">
+              <div className="max-w-[1400px] mx-auto px-8 md:px-20 lg:px-24 w-full grid grid-cols-1 md:grid-cols-12 gap-20 lg:gap-32 items-center relative z-10">
                 
                 <div className="md:col-span-5 space-y-12 reveal delay-1 text-left">
                   <div className="space-y-6">
@@ -411,14 +411,6 @@ const App: React.FC = () => {
                     <p className="text-slate-600/80 text-lg lg:text-xl font-medium max-w-lg leading-relaxed">
                       Use Outparse to improve your writing, catch mistakes, and use best practices to write like a pro.
                     </p>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <button onClick={() => handleNavigate('/pricing')} className="px-8 py-4 bg-slate-900 text-white font-bold rounded-full hover:bg-black transition-all shadow-xl shadow-slate-900/10 active:scale-95">
-                      See plans
-                    </button>
-                    <button onClick={() => setInputText(SAMPLE_TEXT)} className="px-8 py-4 bg-white border border-slate-200 text-slate-600 font-bold rounded-full hover:bg-slate-50 transition-all active:scale-95">
-                      Try demo
-                    </button>
                   </div>
                 </div>
 
