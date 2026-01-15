@@ -42,7 +42,7 @@ const Header = ({ onNavigate, currentPage }: { onNavigate: (path: string) => voi
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    const handleScroll = () => setIsScrolled(window.scrollY > 10);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -70,14 +70,14 @@ const Header = ({ onNavigate, currentPage }: { onNavigate: (path: string) => voi
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-[100] h-20 flex items-center transition-all duration-300 ${isScrolled ? 'bg-white/70 backdrop-blur-xl border-b border-white/20 shadow-sm' : 'bg-transparent'}`}>
-      <div className="max-w-7xl mx-auto w-full px-6 flex items-center justify-between">
-        <div className="flex items-center gap-8">
+      <div className="max-w-[1400px] mx-auto w-full px-8 md:px-20 lg:px-24 flex items-center justify-between">
+        <div className="flex items-center gap-10">
           <div onClick={() => { onNavigate('/'); setMobileMenuOpen(false); }} className="flex items-center gap-2 cursor-pointer group">
-            <GenerateIcon className="w-7 h-7 text-black transition-transform group-hover:scale-110" />
+            <GenerateIcon className="w-8 h-8 text-black transition-transform group-hover:scale-110" />
             <span className={`text-2xl font-bold tracking-tight text-slate-900`}>outparse</span>
           </div>
           
-          <nav className="hidden lg:flex items-center gap-7">
+          <nav className="hidden lg:flex items-center gap-8">
             <NavItem label="Features">
               <DropdownLink to="/grammar-checker" label="Grammar checker" />
               <DropdownLink to="/spell-checker" label="Spell checker" />
@@ -96,15 +96,13 @@ const Header = ({ onNavigate, currentPage }: { onNavigate: (path: string) => voi
         </div>
 
         <div className="flex items-center gap-4">
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-5">
             <button onClick={() => onNavigate('/login')} className={`text-[15px] font-medium transition-colors text-slate-800 hover:text-emerald-700`}>Log in</button>
-            <button onClick={() => onNavigate('/signup')} className={`px-7 py-3 font-semibold text-[14px] rounded-full transition-all bg-emerald-600 text-white hover:bg-emerald-700`}>Sign up</button>
+            <button onClick={() => onNavigate('/signup')} className={`px-7 py-3 font-semibold text-[14px] rounded-full transition-all bg-emerald-600 text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/20`}>Sign up</button>
           </div>
 
           <div className="flex items-center gap-3 lg:hidden">
-            <div className="md:hidden">
-                <button onClick={() => onNavigate('/signup')} className={`px-5 py-2.5 font-semibold text-[13px] rounded-full transition-all bg-emerald-600 text-white hover:bg-emerald-700`}>Sign up</button>
-            </div>
+            <button onClick={() => onNavigate('/signup')} className={`px-5 py-2.5 font-semibold text-[13px] rounded-full transition-all bg-emerald-600 text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/10`}>Sign up</button>
             <button 
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className={`p-2 rounded-lg text-slate-800 hover:bg-black/5 transition-colors`}
@@ -117,18 +115,17 @@ const Header = ({ onNavigate, currentPage }: { onNavigate: (path: string) => voi
         </div>
       </div>
       
-      {/* Mobile/Tablet Menu - Opens Under Header */}
       {mobileMenuOpen && (
-        <div className="absolute top-20 left-0 right-0 bg-white border-b border-slate-100 shadow-2xl p-6 lg:hidden flex flex-col gap-2 max-h-[calc(100vh-5rem)] overflow-y-auto animate-in slide-in-from-top-2 duration-300">
+        <div className="absolute top-20 left-0 right-0 bg-white/95 backdrop-blur-xl border-b border-slate-100 shadow-2xl p-6 lg:hidden flex flex-col gap-1 max-h-[calc(100vh-5rem)] overflow-y-auto animate-in slide-in-from-top-4 duration-300">
           <div>
             <button 
               onClick={() => setExpandedSection(expandedSection === 'features' ? null : 'features')}
-              className="w-full flex items-center justify-between py-4 text-lg font-bold text-slate-900 px-2"
+              className="w-full flex items-center justify-between py-4 text-lg font-bold text-slate-900 px-3 hover:bg-slate-50 rounded-xl transition-colors"
             >
               Features <svg className={`w-5 h-5 transition-transform ${expandedSection === 'features' ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" /></svg>
             </button>
             {expandedSection === 'features' && (
-              <div className="pl-4 pb-2 space-y-1">
+              <div className="pl-6 pb-2 grid gap-1 mt-1">
                 <DropdownLink to="/grammar-checker" label="Grammar checker" />
                 <DropdownLink to="/spell-checker" label="Spell checker" />
                 <DropdownLink to="/dictionary" label="Dictionary" />
@@ -139,12 +136,12 @@ const Header = ({ onNavigate, currentPage }: { onNavigate: (path: string) => voi
           <div>
             <button 
               onClick={() => setExpandedSection(expandedSection === 'resources' ? null : 'resources')}
-              className="w-full flex items-center justify-between py-4 text-lg font-bold text-slate-900 px-2"
+              className="w-full flex items-center justify-between py-4 text-lg font-bold text-slate-900 px-3 hover:bg-slate-50 rounded-xl transition-colors"
             >
               Resources <svg className={`w-5 h-5 transition-transform ${expandedSection === 'resources' ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" /></svg>
             </button>
             {expandedSection === 'resources' && (
-              <div className="pl-4 pb-2 space-y-1">
+              <div className="pl-6 pb-2 grid gap-1 mt-1">
                 <DropdownLink to="/blog" label="Blog" />
                 <DropdownLink to="/writing-tips" label="Writing Tips" />
                 <DropdownLink to="/phrase-of-the-day" label="Phrase of the Day" />
@@ -155,11 +152,11 @@ const Header = ({ onNavigate, currentPage }: { onNavigate: (path: string) => voi
             )}
           </div>
 
-          <button onClick={() => { onNavigate('/pricing'); setMobileMenuOpen(false); }} className="text-left text-lg font-bold text-slate-900 py-4 px-2">Pricing</button>
+          <button onClick={() => { onNavigate('/pricing'); setMobileMenuOpen(false); }} className="text-left text-lg font-bold text-slate-900 py-4 px-3 hover:bg-slate-50 rounded-xl transition-colors">Pricing</button>
           
           <div className="pt-6 mt-4 border-t border-slate-50 flex flex-col gap-3">
             <button onClick={() => { onNavigate('/login'); setMobileMenuOpen(false); }} className="w-full py-4 text-slate-600 font-bold border border-slate-200 rounded-2xl">Log in</button>
-            <button onClick={() => { onNavigate('/signup'); setMobileMenuOpen(false); }} className="w-full py-4 bg-emerald-600 text-white font-bold rounded-2xl">Sign up</button>
+            <button onClick={() => { onNavigate('/signup'); setMobileMenuOpen(false); }} className="w-full py-4 bg-emerald-600 text-white font-bold rounded-2xl shadow-xl shadow-emerald-600/20">Sign up</button>
           </div>
         </div>
       )}
@@ -168,11 +165,11 @@ const Header = ({ onNavigate, currentPage }: { onNavigate: (path: string) => voi
 };
 
 const PageContent = ({ title, desc, children }: { title: string, desc: string, children?: React.ReactNode }) => (
-  <div className="min-h-[60vh] py-24 px-6 reveal">
-    <div className="max-w-4xl mx-auto space-y-10">
-      <div className="space-y-5">
-        <h1 className="text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">{title}</h1>
-        <p className="text-xl text-slate-500 font-medium leading-relaxed max-w-2xl">{desc}</p>
+  <div className="min-h-[60vh] py-24 px-8 md:px-20 lg:px-24 reveal">
+    <div className="max-w-6xl mx-auto space-y-12">
+      <div className="space-y-6">
+        <h1 className="text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">{title}</h1>
+        <p className="text-2xl text-slate-500 font-medium leading-relaxed max-w-3xl">{desc}</p>
       </div>
       <div className="prose prose-slate max-w-none font-normal">
         {children || <p className="text-slate-400">Content for {title} is coming soon.</p>}
@@ -192,25 +189,25 @@ const FeatureReplica = ({ category, original, replacement, explanation }: { cate
   };
 
   return (
-    <div className="bg-white border border-slate-200 rounded-[40px] shadow-2xl p-8 w-full max-w-[360px] relative pointer-events-none select-none">
-      <div className="flex items-center justify-between mb-6">
+    <div className="bg-white border border-slate-200 rounded-[40px] shadow-2xl p-10 w-full max-w-[400px] relative pointer-events-none select-none">
+      <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-3">
           <div className={`w-2 h-2 rounded-full ${getDot(category)}`}></div>
-          <h4 className="text-[12px] font-bold text-slate-400 uppercase tracking-[0.2em]">{category}</h4>
+          <h4 className="text-[13px] font-bold text-slate-400 uppercase tracking-widest">{category}</h4>
         </div>
       </div>
-      <div className="space-y-6 mb-8">
+      <div className="space-y-8 mb-10">
         <div className="flex flex-col">
-          <div className="text-red-500/50 line-through text-lg font-medium leading-tight mb-2">{original}</div>
-          <div className="text-emerald-600 font-extrabold text-2xl leading-tight">{replacement}</div>
+          <div className="text-red-500/50 line-through text-xl font-medium leading-tight mb-2">{original}</div>
+          <div className="text-emerald-600 font-extrabold text-3xl leading-tight">{replacement}</div>
         </div>
-        <div className="pt-5 border-t border-slate-50">
-          <p className="text-[14px] text-slate-600 mb-4 italic leading-relaxed">"{explanation}"</p>
+        <div className="pt-6 border-t border-slate-50">
+          <p className="text-[15px] text-slate-600 mb-4 italic leading-relaxed">"{explanation}"</p>
         </div>
       </div>
-      <div className="flex items-center gap-4">
-        <div className="flex-1 py-4 bg-emerald-600 text-white font-semibold text-[15px] rounded-full text-center opacity-85">Accept</div>
-        <div className="px-6 py-4 text-slate-300 font-semibold text-[15px]">Ignore</div>
+      <div className="flex items-center gap-5">
+        <div className="flex-1 py-4.5 bg-emerald-600 text-white font-bold text-[16px] rounded-full text-center opacity-90 shadow-lg">Accept</div>
+        <div className="px-8 py-4.5 text-slate-300 font-bold text-[16px]">Ignore</div>
       </div>
     </div>
   );
@@ -228,7 +225,7 @@ const FeatureSection = ({ title, description, category, original, replacement, e
           observer.unobserve(entry.target);
         }
       },
-      { threshold: 0.15 }
+      { threshold: 0.1 }
     );
     if (ref.current) observer.observe(ref.current);
     return () => observer.disconnect();
@@ -241,17 +238,17 @@ const FeatureSection = ({ title, description, category, original, replacement, e
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
       }`}
     >
-      <div className={`max-w-7xl mx-auto px-8 flex flex-col md:flex-row ${reverse ? 'md:flex-row-reverse' : ''} items-center gap-16 lg:gap-20`}>
-        <div className="flex-1 space-y-8 text-center md:text-left">
+      <div className={`max-w-[1400px] mx-auto px-8 md:px-20 lg:px-24 flex flex-col md:flex-row ${reverse ? 'md:flex-row-reverse' : ''} items-center gap-20 lg:gap-32`}>
+        <div className="flex-1 space-y-8 text-left">
           <h2 className="text-4xl lg:text-5xl font-extrabold text-slate-900 leading-[1.1] tracking-tight">{title}</h2>
-          <p className="text-xl text-slate-500 leading-relaxed font-medium">{description}</p>
-          <button className="text-emerald-600 font-semibold text-[16px] flex items-center gap-3 group mx-auto md:mx-0">
-            See {category.toLowerCase()} in action <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+          <p className="text-xl text-slate-500 leading-relaxed font-medium max-w-2xl">{description}</p>
+          <button className="text-emerald-600 font-bold text-[17px] flex items-center gap-4 group">
+            Explore {category.toLowerCase()} suite <svg className="w-5 h-5 transition-transform group-hover:translate-x-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
           </button>
         </div>
-        <div className="flex-1 flex justify-center items-center">
-          <div className="relative group">
-            <div className="absolute -inset-10 bg-emerald-100 rounded-[100px] blur-3xl opacity-20 group-hover:opacity-40 transition-opacity"></div>
+        <div className="flex-1 flex justify-center items-center w-full">
+          <div className="relative group w-full max-w-[400px]">
+            <div className="absolute -inset-16 bg-emerald-100 rounded-[120px] blur-[100px] opacity-25 group-hover:opacity-40 transition-opacity"></div>
             <FeatureReplica category={category} original={original} replacement={replacement} explanation={explanation} />
           </div>
         </div>
@@ -267,8 +264,8 @@ const Footer = ({ onNavigate }: { onNavigate: (path: string) => void }) => {
   const toggle = (section: string) => setOpenSection(openSection === section ? null : section);
 
   const FooterHeading = ({ title, id }: { title: string, id: string }) => (
-    <div className="flex items-center justify-between md:block py-4 md:py-0 border-b border-slate-200/20 md:border-0 cursor-pointer md:cursor-default" onClick={() => toggle(id)}>
-      <h4 className="text-[14px] font-bold text-slate-900">{title}</h4>
+    <div className="flex items-center justify-between md:block py-4 md:py-0 border-b border-slate-300 md:border-0 cursor-pointer md:cursor-default" onClick={() => toggle(id)}>
+      <h4 className="text-[15px] font-bold text-slate-900 uppercase tracking-wider">{title}</h4>
       <span className="md:hidden text-slate-600 font-medium text-xl">
         <svg className={`w-5 h-5 transition-transform duration-300 ${openSection === id ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
@@ -284,65 +281,45 @@ const Footer = ({ onNavigate }: { onNavigate: (path: string) => void }) => {
   );
 
   return (
-    <footer className="bg-slate-100 text-slate-900 pt-24 pb-12">
-      <div className="max-w-7xl mx-auto px-8">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-10 md:gap-16 mb-24">
-          <div className="col-span-1 md:col-span-2 space-y-8">
-            <div onClick={() => onNavigate('/')} className="flex items-center gap-2 cursor-pointer">
-              <GenerateIcon className="w-7 h-7 text-black" />
-              <span className="text-2xl font-bold tracking-tight">outparse</span>
+    <footer className="bg-slate-200 text-slate-900 pt-32 pb-12 border-t border-slate-300">
+      <div className="max-w-[1400px] mx-auto px-8 md:px-20 lg:px-24">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-12 md:gap-24 mb-32">
+          <div className="col-span-1 md:col-span-2 space-y-10">
+            <div onClick={() => onNavigate('/')} className="flex items-center gap-3 cursor-pointer">
+              <GenerateIcon className="w-8 h-8 text-black" />
+              <span className="text-3xl font-bold tracking-tight">outparse</span>
             </div>
-            <p className="text-slate-600 text-lg font-medium leading-relaxed max-w-sm">
+            <p className="text-slate-600 text-xl font-medium leading-relaxed max-w-sm">
               The world's most sophisticated editorial suite for high-impact communication.
             </p>
-            <div className="flex items-center gap-5 pt-2">
-              <a href="#" className="text-slate-400 hover:text-slate-900 transition-colors">
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-              </a>
-              <a href="#" className="text-slate-400 hover:text-slate-900 transition-colors">
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
-              </a>
-              <a href="#" className="text-slate-400 hover:text-slate-900 transition-colors">
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.238 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-              </a>
-              <a href="#" className="text-slate-400 hover:text-slate-900 transition-colors">
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.84 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
-              </a>
-            </div>
           </div>
           
           <div>
             <FooterHeading title="Company" id="company" />
             <FooterLinks id="company">
-              <li><button onClick={() => onNavigate('/about-us')} className="text-[14px] font-medium text-slate-600 hover:text-slate-900 transition-colors">About us</button></li>
-              <li><button onClick={() => onNavigate('/careers')} className="text-[14px] font-medium text-slate-600 hover:text-slate-900 transition-colors">Careers</button></li>
-              <li><button onClick={() => onNavigate('/partners')} className="text-[14px] font-medium text-slate-600 hover:text-slate-900 transition-colors">Partners</button></li>
+              <li><button onClick={() => onNavigate('/about-us')} className="text-[15px] font-medium text-slate-600 hover:text-slate-900 transition-colors">About us</button></li>
+              <li><button onClick={() => onNavigate('/careers')} className="text-[15px] font-medium text-slate-600 hover:text-slate-900 transition-colors">Careers</button></li>
             </FooterLinks>
           </div>
           
           <div>
             <FooterHeading title="Product" id="product" />
             <FooterLinks id="product">
-              <li><button onClick={() => onNavigate('/grammar-checker')} className="text-[14px] font-medium text-slate-600 hover:text-slate-900 transition-colors">Grammar checker</button></li>
-              <li><button onClick={() => onNavigate('/spell-checker')} className="text-[14px] font-medium text-slate-600 hover:text-slate-900 transition-colors">Spell checker</button></li>
-              <li><button onClick={() => onNavigate('/pricing')} className="text-[14px] font-medium text-slate-600 hover:text-slate-900 transition-colors">Pricing</button></li>
+              <li><button onClick={() => onNavigate('/grammar-checker')} className="text-[15px] font-medium text-slate-600 hover:text-slate-900 transition-colors">Grammar checker</button></li>
+              <li><button onClick={() => onNavigate('/pricing')} className="text-[15px] font-medium text-slate-600 hover:text-slate-900 transition-colors">Pricing</button></li>
             </FooterLinks>
           </div>
 
           <div>
             <FooterHeading title="Legal" id="legal" />
             <FooterLinks id="legal">
-              <li><button onClick={() => onNavigate('/privacy-policy')} className="text-[14px] font-medium text-slate-600 hover:text-slate-900 transition-colors">Privacy policy</button></li>
-              <li><button onClick={() => onNavigate('/terms-of-service')} className="text-[14px] font-medium text-slate-600 hover:text-slate-900 transition-colors">Terms of service</button></li>
+              <li><button onClick={() => onNavigate('/privacy-policy')} className="text-[15px] font-medium text-slate-600 hover:text-slate-900 transition-colors">Privacy policy</button></li>
             </FooterLinks>
           </div>
         </div>
 
-        <div className="pt-12 border-t border-slate-200 flex flex-col md:flex-row items-center justify-between gap-8">
-          <p className="text-[13px] font-medium text-slate-500">© {currentYear} Outparse Suite. All rights reserved.</p>
-          <div className="flex items-center gap-8">
-            <span className="text-[13px] font-semibold text-slate-600 flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div> All systems operational</span>
-          </div>
+        <div className="pt-16 border-t border-slate-300 flex flex-col md:flex-row items-center justify-between gap-10">
+          <p className="text-[14px] font-semibold text-slate-400">© {currentYear} Outparse Suite. All rights reserved.</p>
         </div>
       </div>
     </footer>
@@ -354,14 +331,8 @@ const App: React.FC = () => {
   const [inputText, setInputText] = useState('');
   const [result, setResult] = useState<ProofreadingResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [readingStatus, setReadingStatus] = useState<'idle' | 'playing' | 'paused'>('idle');
   const [tone, setTone] = useState<EditorialTone>('Professional');
-  const [showMenu, setShowMenu] = useState(false);
-  const [menuView, setMenuView] = useState<'main' | 'download'>('main');
   
-  const audioContextRef = useRef<AudioContext | null>(null);
-  const audioSourceRef = useRef<AudioBufferSourceNode | null>(null);
-
   useEffect(() => {
     const handlePopState = () => {
       setCurrentPath(window.location.pathname);
@@ -391,99 +362,12 @@ const App: React.FC = () => {
     return () => { if (timeoutRef.current) window.clearTimeout(timeoutRef.current); };
   }, [inputText, tone, currentPath]);
 
-  const handleToggleReadAloud = async () => {
-    if (!inputText) return;
-
-    if (readingStatus === 'playing') {
-      audioContextRef.current?.suspend();
-      setReadingStatus('paused');
-      return;
+  const handleApplyAll = useCallback(() => {
+    if (result?.correctedText) {
+      setInputText(result.correctedText);
+      setResult(null);
     }
-
-    if (readingStatus === 'paused') {
-      audioContextRef.current?.resume();
-      setReadingStatus('playing');
-      return;
-    }
-
-    setReadingStatus('playing');
-    try {
-      const base64Audio = await generateSpeech(inputText);
-      if (!base64Audio) throw new Error();
-      const audioData = atob(base64Audio);
-      const arrayBuffer = new ArrayBuffer(audioData.length);
-      const view = new Uint8Array(arrayBuffer);
-      for (let i = 0; i < audioData.length; i++) view[i] = audioData.charCodeAt(i);
-      if (!audioContextRef.current) audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
-      const ctx = audioContextRef.current;
-      if (ctx.state === 'suspended') await ctx.resume();
-      
-      const dataInt16 = new Int16Array(arrayBuffer);
-      const buffer = ctx.createBuffer(1, dataInt16.length, 24000);
-      const channelData = buffer.getChannelData(0);
-      for (let i = 0; i < dataInt16.length; i++) channelData[i] = dataInt16[i] / 32768.0;
-      const source = ctx.createBufferSource();
-      source.buffer = buffer;
-      source.connect(ctx.destination);
-      source.onended = () => {
-        setReadingStatus('idle');
-        audioSourceRef.current = null;
-      };
-      audioSourceRef.current = source;
-      source.start();
-    } catch (err) {
-      setReadingStatus('idle');
-    }
-  };
-
-  const handleStopReadAloud = () => {
-    if (audioSourceRef.current) {
-      audioSourceRef.current.stop();
-      audioSourceRef.current = null;
-    }
-    setReadingStatus('idle');
-  };
-
-  const handleCopy = async () => {
-    if (!inputText) return;
-    await navigator.clipboard.writeText(inputText);
-    setShowMenu(false);
-  };
-
-  const handleDownload = (type: 'docx' | 'pdf' | 'txt') => {
-    if (!inputText) return;
-    if (type === 'pdf') {
-      const doc = new jsPDF();
-      const margin = 20;
-      const pageWidth = doc.internal.pageSize.getWidth();
-      const splitText = doc.splitTextToSize(inputText, pageWidth - (margin * 2));
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(12);
-      doc.text(splitText, margin, 30);
-      doc.save("outparse-export.pdf");
-    } else if (type === 'docx') {
-      const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export</title></head><body>";
-      const footer = "</body></html>";
-      const sourceHTML = header + inputText.replace(/\n/g, '<br>') + footer;
-      const source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
-      const fileDownload = document.createElement("a");
-      document.body.appendChild(fileDownload);
-      fileDownload.href = source;
-      fileDownload.download = 'outparse-export.doc';
-      fileDownload.click();
-      document.body.removeChild(fileDownload);
-    } else {
-      const blob = new Blob([inputText], { type: 'text/plain' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `outparse-export.txt`;
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-    setShowMenu(false);
-    setMenuView('main');
-  };
+  }, [result]);
 
   const applySingleSuggestion = useCallback((s: Suggestion) => {
     setInputText(prev => {
@@ -503,8 +387,6 @@ const App: React.FC = () => {
     });
   }, []);
 
-  const errorCount = result?.suggestions.length || 0;
-
   const handleNavigate = (path: string) => {
     window.history.pushState({}, '', path);
     setCurrentPath(path);
@@ -518,20 +400,30 @@ const App: React.FC = () => {
       case 'home':
         return (
           <>
-            <main className="min-h-[90vh] flex items-center relative overflow-hidden pt-20 pb-20">
-              <div className="max-w-7xl mx-auto px-8 w-full grid grid-cols-1 md:grid-cols-12 gap-16 lg:gap-24 items-center relative z-10">
+            <main className="min-h-[100vh] flex items-center relative overflow-hidden pt-48 pb-32">
+              <div className="max-w-[1400px] mx-auto px-8 md:px-20 lg:px-24 w-full grid grid-cols-1 md:grid-cols-12 gap-y-24 md:gap-x-32 items-center relative z-10">
                 
-                <div className="md:col-span-5 space-y-8 reveal delay-1 py-10 md:py-0 text-center md:text-left">
-                  <h1 className="text-6xl md:text-7xl lg:text-8xl font-extrabold text-slate-900 tracking-tighter leading-[1] drop-shadow-sm">
-                    Grammar checking
-                  </h1>
-                  <p className="text-slate-600/80 text-xl lg:text-2xl font-medium max-w-xl leading-relaxed mx-auto md:mx-0">
-                    Use Outparse to improve your writing, catch mistakes, and use best practices to write like a pro.
-                  </p>
+                <div className="md:col-span-5 space-y-12 reveal delay-1 text-left">
+                  <div className="space-y-6">
+                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tighter leading-[1.2]">
+                      Grammar checking
+                    </h1>
+                    <p className="text-slate-600/80 text-lg lg:text-xl font-medium max-w-lg leading-relaxed">
+                      Use Outparse to improve your writing, catch mistakes, and use best practices to write like a pro.
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <button onClick={() => handleNavigate('/pricing')} className="px-8 py-4 bg-slate-900 text-white font-bold rounded-full hover:bg-black transition-all shadow-xl shadow-slate-900/10 active:scale-95">
+                      See plans
+                    </button>
+                    <button onClick={() => setInputText(SAMPLE_TEXT)} className="px-8 py-4 bg-white border border-slate-200 text-slate-600 font-bold rounded-full hover:bg-slate-50 transition-all active:scale-95">
+                      Try demo
+                    </button>
+                  </div>
                 </div>
 
                 <div className="md:col-span-7 w-full reveal delay-3">
-                  <div className={`overflow-hidden rounded-[25px] shadow-2xl transition-all duration-300 ${isLoading ? 'check-gradient-border' : ''}`}>
+                  <div className={`overflow-hidden rounded-[25px] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] transition-all duration-300 ${isLoading ? 'check-gradient-border' : ''}`}>
                     <div className={`${isLoading ? 'check-gradient-inner rounded-[22px]' : ''}`}>
                       <Editor 
                         value={inputText} onChange={setInputText} isLoading={isLoading} 
@@ -541,77 +433,15 @@ const App: React.FC = () => {
                         tone={tone} onToneChange={setTone}
                         onApplySuggestion={applySingleSuggestion}
                         onIgnoreSuggestion={(s) => setResult(p => p ? {...p, suggestions: p.suggestions.filter(i => i.id !== s.id)} : null)}
+                        onApplyAll={handleApplyAll}
                       />
-                      <div className="px-8 py-7 bg-white border-t border-slate-100 flex items-center justify-between flex-wrap gap-4 rounded-b-[25px]">
-                        <div className="flex items-center gap-2">
-                          <button 
-                            onClick={handleToggleReadAloud} 
-                            disabled={!inputText} 
-                            className="flex items-center gap-2.5 px-5 py-3 bg-white rounded-full text-slate-600 hover:text-emerald-600 font-semibold text-[13px] border border-slate-200 transition-all shadow-sm active:scale-95 disabled:opacity-30"
-                          >
-                            {readingStatus === 'playing' ? (
-                              <><svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>Pause</>
-                            ) : readingStatus === 'paused' ? (
-                              <><svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>Resume</>
-                            ) : (
-                              <><svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>Listen</>
-                            )}
-                          </button>
-                          {readingStatus !== 'idle' && (
-                            <button onClick={handleStopReadAloud} className="p-3 bg-white text-rose-500 rounded-full border border-slate-200 shadow-sm hover:bg-rose-50 transition-colors">
-                              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M6 6h12v12H6z"/></svg>
-                            </button>
-                          )}
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <button onClick={() => { setInputText(result?.correctedText || inputText); setResult(null); }} disabled={isLoading || !inputText.trim() || errorCount === 0} className={`px-10 py-4 rounded-full font-bold text-[16px] transition-all border shadow-lg active:scale-95 ${errorCount > 0 ? 'bg-emerald-600 text-white border-emerald-500 hover:bg-emerald-700' : 'bg-slate-200 text-slate-400 border-slate-300 cursor-not-allowed'}`}>
-                            {isLoading ? 'Checking...' : `Refine text ${errorCount > 0 ? `(${errorCount})` : ''}`}
-                          </button>
-                          <div className="relative">
-                            <button onClick={() => { setShowMenu(!showMenu); setMenuView('main'); }} className="p-4 bg-white text-slate-400 hover:bg-slate-50 rounded-full transition-all">
-                              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" /></svg>
-                            </button>
-                            {showMenu && (
-                              <div className="absolute bottom-full mb-4 right-0 bg-white border border-slate-200 rounded-[32px] shadow-2xl p-4 z-30 min-w-[240px] animate-in slide-in-from-bottom-4 zoom-in-95">
-                                {menuView === 'main' ? (
-                                  <>
-                                    <button onClick={handleCopy} className="w-full text-left px-5 py-4 text-[14px] font-semibold text-slate-700 hover:bg-slate-50 rounded-2xl flex items-center gap-4 transition-colors">
-                                      <svg fill="currentColor" width="22" height="22" viewBox="0 0 24 24" className="text-slate-700"><path d="M5.5 4.63V17.25c0 1.8 1.46 3.25 3.25 3.25h8.62c-.31.88-1.15 1.5-2.13 1.5H8.75A4.75 4.75 0 014 17.25V6.75c0-.98.63-1.81 1.5-2.12zM17.75 2C18.99 2 20 3 20 4.25v13c0 1.24-1 2.25-2.25 2.25h-9c-1.24 0-2.25-1-2.25-2.25v-13C6.5 3.01 7.5 2 8.75 2h9zm0 1.5h-9a.75.75 0 00-.75.75v13c0 .41.34.75.75.75h9c.41 0 .75-.34.75-.75v-13a.75.75 0 00-.75-.75z" /></svg>
-                                      Copy text
-                                    </button>
-                                    <button onClick={() => setMenuView('download')} className="w-full text-left px-5 py-4 text-[14px] font-semibold text-slate-700 hover:bg-slate-50 rounded-2xl flex items-center justify-between transition-colors group">
-                                      <span className="flex items-center gap-4"><svg className="w-5.5 h-5.5 text-slate-700" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1" /></svg>Export...</span>
-                                      <svg className="w-3.5 h-3.5 text-slate-300 group-hover:text-slate-500 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" /></svg>
-                                    </button>
-                                    <div className="h-px bg-slate-100 my-2 mx-2"></div>
-                                    <button onClick={() => { setInputText(''); setResult(null); setShowMenu(false); }} className="w-full text-left px-5 py-4 text-[14px] font-semibold text-rose-600 hover:bg-rose-50 rounded-2xl flex items-center gap-4 transition-colors">
-                                      <svg fill="currentColor" width="22" height="22" viewBox="0 0 24 24" className="text-rose-500"><path d="M10 5h4a2 2 0 10-4 0zM8.5 5a3.5 3.5 0 117 0h5.75a.75.75 0 010 1.5h-1.32l-1.17 12.11A3.75 3.75 0 0115.03 22H8.97a3.75 3.75 0 01-3.73-3.39L4.07 6.5H2.75a.75.75 0 010-1.5H8.5zm2 4.75a.75.75 0 00-1.5 0v7.5a.75.75 0 001.5 0v-7.5zM14.25 9c.41 0 .75.34.75.75v7.5a.75.75 0 01-1.5 0v-7.5c0-.41.34-.75.75-.75zm-7.52 9.47a2.25 2.25 0 002.24 2.03h6.06c1.15 0 2.12-.88 2.24-2.03L18.42 6.5H5.58l1.15 11.97z" /></svg>
-                                      Clear
-                                    </button>
-                                  </>
-                                ) : (
-                                  <>
-                                    <button onClick={() => setMenuView('main')} className="w-full text-left px-4 py-2 text-[11px] font-bold text-emerald-500 hover:text-emerald-700 flex items-center gap-2 mb-2 bg-emerald-50 rounded-xl">
-                                      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" /></svg>
-                                      Back
-                                    </button>
-                                    <button onClick={() => handleDownload('pdf')} className="w-full text-left px-5 py-3.5 text-[14px] font-semibold text-slate-700 hover:bg-slate-50 rounded-xl transition-colors">PDF Document</button>
-                                    <button onClick={() => handleDownload('docx')} className="w-full text-left px-5 py-3.5 text-[14px] font-semibold text-slate-700 hover:bg-slate-50 rounded-xl transition-colors">Word (.doc)</button>
-                                    <button onClick={() => handleDownload('txt')} className="w-full text-left px-5 py-3.5 text-[14px] font-semibold text-slate-700 hover:bg-slate-50 rounded-xl transition-colors">Plain Text (.txt)</button>
-                                  </>
-                                )}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </main>
 
-            <div className="bg-white/40">
+            <div className="bg-transparent space-y-32">
               <FeatureSection 
                 title="Eliminate grammar mistakes instantly"
                 description="Our advanced neural networks detect complex grammatical errors that traditional checkers miss. From subject-verb agreement to nuanced punctuation, we ensure your text is technically flawless."
@@ -639,45 +469,101 @@ const App: React.FC = () => {
               />
             </div>
 
-            <section className="bg-emerald-600 py-24">
-              <div className="max-w-4xl mx-auto px-8 text-center space-y-8">
-                <h2 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight">Writing tips and product updates</h2>
-                <p className="text-emerald-50 text-xl font-medium">Join 100,000+ writers receiving our weekly editorial insights.</p>
-                <div className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
-                  <input type="email" placeholder="Email address" className="flex-1 px-8 py-4 rounded-full border-none focus:ring-4 focus:ring-white/20 text-lg shadow-xl" />
-                  <button className="px-10 py-4 bg-slate-900 text-white font-bold rounded-full hover:bg-black transition-all text-lg shadow-xl">Subscribe</button>
+            <section className="py-48">
+              <div className="max-w-[1400px] mx-auto px-8 md:px-20 lg:px-24 text-left space-y-12">
+                <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">Writing tips and product updates</h2>
+                <p className="text-slate-600 text-xl font-medium max-w-4xl">Join 100,000+ writers receiving our weekly editorial insights.</p>
+                <div className="flex flex-col sm:flex-row gap-6 max-w-2xl pt-8">
+                  <input type="email" placeholder="Email address" className="flex-1 px-10 py-6 rounded-full border border-slate-200 focus:ring-4 focus:ring-emerald-500/10 text-xl shadow-2xl bg-white focus:outline-none" />
+                  <button className="px-12 py-6 bg-slate-900 text-white font-extrabold rounded-full hover:bg-black transition-all text-xl shadow-2xl">Subscribe</button>
                 </div>
               </div>
             </section>
           </>
         );
+      case 'about':
+        return (
+          <PageContent title="About Us" desc="Outparse is dedicated to refining the world's communication through sophisticated, AI-driven editorial tools.">
+            <div className="space-y-12 text-slate-700 leading-relaxed text-lg max-w-4xl">
+              <section className="space-y-4">
+                <h2 className="text-2xl font-bold text-slate-900">Our Mission</h2>
+                <p>To empower every individual and organization to communicate with clarity, precision, and confidence. We believe that professional-grade editing should be accessible to everyone, everywhere.</p>
+              </section>
+
+              <section className="space-y-4">
+                <h2 className="text-2xl font-bold text-slate-900">The Technology</h2>
+                <p>Outparse leverages cutting-edge Large Language Models (LLMs) and custom editorial neural networks. Our systems are trained on millions of high-quality professional documents to understand the nuances of grammar, style, and tone better than any traditional rule-based checker.</p>
+              </section>
+
+              <section className="space-y-4">
+                <h2 className="text-2xl font-bold text-slate-900">Our Story</h2>
+                <p>Founded by a team of linguistic experts and software engineers, Outparse started as a small project to solve the inconsistencies of common word processors. Today, it serves thousands of users daily, from professional journalists to students around the globe.</p>
+              </section>
+
+              <section className="space-y-4">
+                <h2 className="text-2xl font-bold text-slate-900">The Team</h2>
+                <p>We are a distributed team of engineers, designers, and linguists passionate about the intersection of human language and artificial intelligence. We work tirelessly to ensure that Outparse remains the gold standard in editorial assistance.</p>
+              </section>
+            </div>
+          </PageContent>
+        );
+      case 'privacy':
+        return (
+          <PageContent title="Privacy Policy" desc="Your privacy is our priority. We are committed to protecting your personal data and your right to privacy.">
+            <div className="space-y-12 text-slate-700 leading-relaxed text-lg max-w-4xl">
+              <section className="space-y-4">
+                <h2 className="text-2xl font-bold text-slate-900">1. Introduction</h2>
+                <p>Welcome to Outparse. We respect your privacy and want you to understand how we collect, use, and share data about you. This Privacy Policy covers our data collection practices and describes your rights to access, correct, or restrict our use of your personal data.</p>
+              </section>
+
+              <section className="space-y-4">
+                <h2 className="text-2xl font-bold text-slate-900">2. Data We Collect</h2>
+                <p>When you use our editor, we process the text you input to provide grammar and style suggestions. This processing is performed in real-time. We also collect basic account information if you choose to sign up, such as your email address and preferred editorial settings.</p>
+              </section>
+
+              <section className="space-y-4">
+                <h2 className="text-2xl font-bold text-slate-900">3. How We Use Your Data</h2>
+                <ul className="list-disc pl-6 space-y-2">
+                  <li>To provide and improve our proofreading services.</li>
+                  <li>To personalize your writing experience based on your chosen tone.</li>
+                  <li>To communicate with you about product updates (only if you subscribe).</li>
+                  <li>To ensure the security and integrity of our platform.</li>
+                </ul>
+              </section>
+
+              <section className="space-y-4">
+                <h2 className="text-2xl font-bold text-slate-900">4. Data Security</h2>
+                <p>We use appropriate security measures to protect against unauthorized access, alteration, disclosure, or destruction of your personal data. We do not sell your personal data to third parties.</p>
+              </section>
+
+              <section className="space-y-4">
+                <h2 className="text-2xl font-bold text-slate-900">5. Your Rights</h2>
+                <p>You have the right to access, update, or delete your account information at any time. If you have questions about your data or wish to exercise your rights, please contact our support team.</p>
+              </section>
+
+              <section className="space-y-4">
+                <h2 className="text-2xl font-bold text-slate-900">6. Contact Us</h2>
+                <p>If you have any questions, concerns, or feedback about our privacy practices, please reach out to us at privacy@outparse.ai.</p>
+              </section>
+            </div>
+          </PageContent>
+        );
       case 'pricing':
         return (
-          <PageContent title="Simple, transparent pricing" desc="Choose the plan that's right for your writing goals.">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 py-16">
-              <div className="border border-slate-200 p-12 rounded-[48px] space-y-8 bg-white/50 shadow-sm reveal">
-                <h3 className="text-3xl font-extrabold">Free</h3>
-                <p className="text-slate-500 text-lg">Essential tools for basic writing improvement.</p>
-                <div className="text-5xl font-extrabold">$0<span className="text-xl text-slate-400">/mo</span></div>
-                <ul className="space-y-5">
-                  <li className="flex items-center gap-3 text-lg font-medium text-slate-600">✓ 5,000 words / month</li>
-                  <li className="flex items-center gap-3 text-lg font-medium text-slate-600">✓ Basic grammar checker</li>
-                  <li className="flex items-center gap-3 text-lg font-medium text-slate-600">✓ Paraphrasing tool</li>
-                </ul>
-                <button className="w-full py-5 bg-white border border-slate-200 rounded-full font-bold text-lg shadow-sm hover:bg-slate-100 transition-colors">Get started</button>
+          <PageContent title="Simple, transparent pricing" desc="Choose the plan that's right for your writing goals. All plans support USDT payments.">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-16 py-24">
+              <div className="border border-slate-200 p-16 rounded-[64px] space-y-10 bg-white/40 shadow-xl reveal">
+                <h3 className="text-4xl font-extrabold">Free</h3>
+                <p className="text-slate-500 text-xl">Essential tools for basic writing improvement.</p>
+                <div className="text-6xl font-extrabold">$0<span className="text-2xl text-slate-400 font-medium">/mo</span></div>
+                <button onClick={() => handleNavigate('/signup')} className="w-full py-6 bg-white border border-slate-200 rounded-full font-extrabold text-xl shadow-lg hover:bg-slate-50 transition-colors">Get started</button>
               </div>
-              <div className="border-[6px] border-slate-900 p-12 rounded-[48px] space-y-8 shadow-2xl relative bg-white reveal">
-                <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-8 py-2 rounded-full text-sm font-bold uppercase tracking-widest">Recommended</div>
-                <h3 className="text-3xl font-extrabold">Premium</h3>
-                <p className="text-slate-500 text-lg">The full power of the AI editorial engine.</p>
-                <div className="text-5xl font-extrabold">$12<span className="text-xl text-slate-400">/mo</span></div>
-                <ul className="space-y-5">
-                  <li className="flex items-center gap-3 text-lg font-medium text-slate-600">✓ Unlimited volume</li>
-                  <li className="flex items-center gap-3 text-lg font-medium text-slate-600">✓ Advanced style guide</li>
-                  <li className="flex items-center gap-3 text-lg font-medium text-slate-600">✓ Deep plagiarism scanning</li>
-                  <li className="flex items-center gap-3 text-lg font-medium text-slate-600">✓ 24/7 VIP support</li>
-                </ul>
-                <button className="w-full py-5 bg-slate-900 text-white rounded-full font-bold text-lg shadow-xl shadow-slate-900/20 hover:scale-[1.02] transition-transform">Upgrade now</button>
+              <div className="border-[8px] border-slate-900 p-16 rounded-[64px] space-y-10 shadow-3xl relative bg-white reveal">
+                <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white px-12 py-3 rounded-full text-sm font-black uppercase tracking-[0.2em]">Best Value</div>
+                <h3 className="text-4xl font-extrabold">Premium</h3>
+                <p className="text-slate-500 text-xl">The full power of the AI editorial engine with unlimited checks.</p>
+                <div className="text-6xl font-extrabold">3<span className="text-2xl text-slate-900 font-medium"> USDT</span><span className="text-2xl text-slate-400 font-medium">/mo</span></div>
+                <button onClick={() => handleNavigate('/signup')} className="w-full py-6 bg-slate-900 text-white rounded-full font-extrabold text-xl shadow-2xl hover:scale-[1.02] transition-transform">Upgrade now</button>
               </div>
             </div>
           </PageContent>
@@ -688,7 +574,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className={`min-h-screen flex flex-col brand-gradient`}>
+    <div className={`min-h-screen flex flex-col brand-gradient overflow-x-hidden`}>
       <Header onNavigate={handleNavigate} currentPage={currentPath} />
       {renderCurrentPage()}
       <Footer onNavigate={handleNavigate} />
