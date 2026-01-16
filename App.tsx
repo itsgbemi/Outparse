@@ -70,7 +70,7 @@ const Header = ({ onNavigate, currentPage }: { onNavigate: (path: string) => voi
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-[100] h-20 flex items-center transition-all duration-300 ${isScrolled ? 'bg-white/70 backdrop-blur-xl border-b border-white/20 shadow-sm' : 'bg-transparent'}`}>
-      <div className="max-w-[1400px] mx-auto w-full px-8 md:px-20 lg:px-24 flex items-center justify-between">
+      <div className="max-w-[1400px] mx-auto w-full px-8 md:px-12 lg:px-24 flex items-center justify-between">
         <div className="flex items-center gap-10">
           <div onClick={() => { onNavigate('/'); setMobileMenuOpen(false); }} className="flex items-center gap-2 cursor-pointer group">
             <GenerateIcon className="w-8 h-8 text-black transition-transform group-hover:scale-110" />
@@ -105,11 +105,23 @@ const Header = ({ onNavigate, currentPage }: { onNavigate: (path: string) => voi
             <button onClick={() => onNavigate('/signup')} className={`px-5 py-2.5 font-semibold text-[13px] rounded-full transition-all bg-emerald-600 text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/10`}>Sign up</button>
             <button 
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className={`p-2 rounded-lg text-slate-800 hover:bg-black/5 transition-colors`}
+              className={`p-2 rounded-lg text-slate-800 hover:bg-black/5 transition-colors flex items-center justify-center`}
             >
-              <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d={mobileMenuOpen ? "M6 18L18 6" : "M4 6h16M4 12h16M4 18h16"} />
-              </svg>
+              {mobileMenuOpen ? (
+                <svg className="w-7 h-7" viewBox="0 0 512 512" version="1.1" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" fill="#000000">
+                  <g id="_x37_12-_close__x2C__cross__x2C__cancel__x2C_">
+                    <g>
+                      <line style={{fill:'none',stroke:'#000000',strokeWidth:24,strokeLinecap:'round',strokeLinejoin:'round',strokeMiterlimit:2.6131}} x1="486.21" x2="26.739" y1="26.814" y2="486.139"></line>
+                      <line style={{fill:'none',stroke:'#000000',strokeWidth:24,strokeLinecap:'round',strokeLinejoin:'round',strokeMiterlimit:2.6131}} x1="486.21" x2="26.739" y1="486.139" y2="26.814"></line>
+                    </g>
+                  </g>
+                </svg>
+              ) : (
+                <svg width="24" height="24" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M17.2027 4.90036V6.43657H2.79727V4.90036H17.2027Z" fill="currentColor"></path>
+                  <path d="M10.9604 13.0635V14.5997H2.79727V13.0635H10.9604Z" fill="currentColor"></path>
+                </svg>
+              )}
             </button>
           </div>
         </div>
@@ -178,6 +190,66 @@ const PageContent = ({ title, desc, children }: { title: string, desc: string, c
   </div>
 );
 
+const FAQSection = () => {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  
+  const faqs = [
+    {
+      q: "What is grammar checking?",
+      a: "Grammar checking is the process of automatically identifying and correcting grammatical errors in written text. Modern tools use advanced AI to detect nuances that go beyond simple rules."
+    },
+    {
+      q: "What does a grammar checker do?",
+      a: "A grammar checker scans your text for mistakes in punctuation, spelling, syntax, and style. It then provides suggestions for improvements to make your writing clearer and more professional."
+    },
+    {
+      q: "What are the advantages of online grammar checking?",
+      a: "Online grammar checking provides instant feedback, allows you to access your tools from any device, and leverages the latest AI models that are continuously updated for better accuracy."
+    },
+    {
+      q: "Why use grammar checking software?",
+      a: "Grammar checking software ensures your communication is error-free, saves time on proofreading, and helps you learn better writing habits over time."
+    }
+  ];
+
+  return (
+    <section className="bg-white py-32">
+      <div className="max-w-[1400px] mx-auto px-8 md:px-12 lg:px-24">
+        <h2 className="text-4xl lg:text-5xl font-extrabold text-slate-900 mb-12 tracking-tight">Frequently asked questions</h2>
+        
+        <div className="flex gap-4 mb-8 text-[14px]">
+          <button onClick={() => setOpenIndex(null)} className="text-blue-500 font-medium hover:underline">Collapse all</button>
+          <span className="text-slate-300">|</span>
+          <button onClick={() => setOpenIndex(0)} className="text-blue-500 font-medium hover:underline">Expand all</button>
+        </div>
+
+        <div className="border-t border-slate-100">
+          {faqs.map((faq, i) => (
+            <div key={i} className="border-b border-slate-100">
+              <button 
+                onClick={() => setOpenIndex(openIndex === i ? null : i)}
+                className="w-full py-8 flex items-center gap-6 text-left group transition-colors hover:bg-slate-50/50"
+              >
+                <span className={`transition-transform duration-300 ${openIndex === i ? 'rotate-90' : ''}`}>
+                  <svg className="w-4 h-4 text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </span>
+                <span className="text-xl font-bold text-slate-900">{faq.q}</span>
+              </button>
+              <div className={`overflow-hidden transition-all duration-300 ${openIndex === i ? 'max-h-96 pb-8' : 'max-h-0'}`}>
+                <div className="pl-14 text-slate-600 text-lg leading-relaxed max-w-4xl">
+                  {faq.a}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
 const FeatureReplica = ({ category, original, replacement, explanation }: { category: string, original: string, replacement: string, explanation: string }) => {
   const getDot = (cat: string) => {
     switch(cat) {
@@ -189,7 +261,7 @@ const FeatureReplica = ({ category, original, replacement, explanation }: { cate
   };
 
   return (
-    <div className="bg-white border border-slate-200 rounded-[40px] shadow-2xl p-10 w-full max-w-[400px] relative pointer-events-none select-none">
+    <div className="bg-white border border-slate-200 rounded-[40px] shadow-2xl p-10 w-full max-w-[400px] relative pointer-events-none select-none mx-auto">
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-3">
           <div className={`w-2 h-2 rounded-full ${getDot(category)}`}></div>
@@ -238,7 +310,7 @@ const FeatureSection = ({ title, description, category, original, replacement, e
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
       }`}
     >
-      <div className={`max-w-[1400px] mx-auto px-8 md:px-20 lg:px-24 flex flex-col md:flex-row ${reverse ? 'md:flex-row-reverse' : ''} items-center gap-20 lg:gap-32`}>
+      <div className={`max-w-[1400px] mx-auto px-8 md:px-12 lg:px-24 flex flex-col md:flex-row ${reverse ? 'md:flex-row-reverse' : ''} items-center gap-20 lg:gap-32`}>
         <div className="flex-1 space-y-8 text-left">
           <h2 className="text-4xl lg:text-5xl font-extrabold text-slate-900 leading-[1.1] tracking-tight">{title}</h2>
           <p className="text-xl text-slate-500 leading-relaxed font-medium max-w-2xl">{description}</p>
@@ -265,7 +337,7 @@ const Footer = ({ onNavigate }: { onNavigate: (path: string) => void }) => {
 
   const FooterHeading = ({ title, id }: { title: string, id: string }) => (
     <div className="flex items-center justify-between md:block py-4 md:py-0 border-b border-slate-300 md:border-0 cursor-pointer md:cursor-default" onClick={() => toggle(id)}>
-      <h4 className="text-[15px] font-bold text-slate-900 uppercase tracking-wider">{title}</h4>
+      <h4 className="text-[15px] font-bold text-slate-900">{title}</h4>
       <span className="md:hidden text-slate-600 font-medium text-xl">
         <svg className={`w-5 h-5 transition-transform duration-300 ${openSection === id ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
@@ -282,7 +354,7 @@ const Footer = ({ onNavigate }: { onNavigate: (path: string) => void }) => {
 
   return (
     <footer className="bg-slate-200 text-slate-900 pt-32 pb-12 border-t border-slate-300">
-      <div className="max-w-[1400px] mx-auto px-8 md:px-20 lg:px-24">
+      <div className="max-w-[1400px] mx-auto px-8 md:px-12 lg:px-24">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-12 md:gap-24 mb-32">
           <div className="col-span-1 md:col-span-2 space-y-10">
             <div onClick={() => onNavigate('/')} className="flex items-center gap-3 cursor-pointer">
@@ -343,11 +415,17 @@ const App: React.FC = () => {
 
   const timeoutRef = useRef<number | null>(null);
   useEffect(() => {
+    // If text is cleared or route changed, stop checking and reset results immediately
     if (!inputText.trim() || currentPath !== '/') {
+      if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
       setResult(null);
+      setIsLoading(false);
       return;
     }
+
+    // Debounce analysis to avoid rapid API calls (reduced to 700ms for better responsiveness)
     if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
+    
     timeoutRef.current = window.setTimeout(async () => {
       setIsLoading(true);
       try {
@@ -358,7 +436,8 @@ const App: React.FC = () => {
       } finally {
         setIsLoading(false);
       }
-    }, 1200);
+    }, 700);
+
     return () => { if (timeoutRef.current) window.clearTimeout(timeoutRef.current); };
   }, [inputText, tone, currentPath]);
 
@@ -400,21 +479,19 @@ const App: React.FC = () => {
       case 'home':
         return (
           <>
-            <main className="min-h-[100vh] flex items-center relative overflow-hidden pt-48 pb-32">
-              <div className="max-w-[1400px] mx-auto px-8 md:px-20 lg:px-24 w-full grid grid-cols-1 md:grid-cols-12 gap-20 lg:gap-32 items-center relative z-10">
+            <main className="min-h-[100vh] flex flex-col items-center relative overflow-hidden pt-48 pb-32">
+              <div className="max-w-[1400px] mx-auto px-8 md:px-12 lg:px-24 w-full flex flex-col items-center gap-16 relative z-10">
                 
-                <div className="md:col-span-5 space-y-12 reveal delay-1 text-left">
-                  <div className="space-y-6">
-                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tighter leading-[1.2]">
-                      Grammar checking
-                    </h1>
-                    <p className="text-slate-600/80 text-lg lg:text-xl font-medium max-w-lg leading-relaxed">
-                      Use Outparse to improve your writing, catch mistakes, and use best practices to write like a pro.
-                    </p>
-                  </div>
+                <div className="text-center space-y-6 reveal delay-1 max-w-3xl">
+                  <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold text-slate-900 tracking-tighter leading-[1.1]">
+                    Grammar checking
+                  </h1>
+                  <p className="text-slate-600/80 text-lg lg:text-xl font-medium leading-relaxed">
+                    Use Outparse to improve your writing, catch mistakes, and use best practices to write like a pro.
+                  </p>
                 </div>
 
-                <div className="md:col-span-7 w-full reveal delay-3">
+                <div className="w-full max-w-5xl reveal delay-3">
                   <div className={`overflow-hidden rounded-[25px] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.15)] transition-all duration-300 ${isLoading ? 'check-gradient-border' : ''}`}>
                     <div className={`${isLoading ? 'check-gradient-inner rounded-[22px]' : ''}`}>
                       <Editor 
@@ -461,8 +538,10 @@ const App: React.FC = () => {
               />
             </div>
 
-            <section className="py-48">
-              <div className="max-w-[1400px] mx-auto px-8 md:px-20 lg:px-24 text-left space-y-12">
+            <FAQSection />
+
+            <section className="py-48 bg-transparent">
+              <div className="max-w-[1400px] mx-auto px-8 md:px-12 lg:px-24 text-left space-y-12">
                 <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">Writing tips and product updates</h2>
                 <p className="text-slate-600 text-xl font-medium max-w-4xl">Join 100,000+ writers receiving our weekly editorial insights.</p>
                 <div className="flex flex-col sm:flex-row gap-6 max-w-2xl pt-8">

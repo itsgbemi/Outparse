@@ -43,8 +43,9 @@ const PROOFREADING_SCHEMA = {
 };
 
 export const analyzeText = async (text: string, tone: EditorialTone): Promise<ProofreadingResult> => {
+  // Switched to gemini-3-flash-preview for speed/latency optimization
   const response = await ai.models.generateContent({
-    model: 'gemini-3-pro-preview',
+    model: 'gemini-3-flash-preview',
     contents: `You are a high-end professional editor. Proofread the text for a ${tone} tone.
 
 CRITICAL PRECISION RULES:
