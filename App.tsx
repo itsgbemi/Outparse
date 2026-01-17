@@ -35,7 +35,8 @@ const Header = ({ onNavigate }: { onNavigate: (path: string) => void }) => {
         </div>
 
         <div className="flex items-center gap-3">
-          <button onClick={() => onNavigate('/signup')} className="px-5 py-2.5 md:px-7 md:py-3 font-bold text-[13px] md:text-[14px] rounded-full transition-all bg-[#2ba37b] text-white hover:opacity-90 shadow-lg shadow-[#2ba37b]/20">Sign up</button>
+          <button onClick={() => onNavigate('/login')} className="hidden md:block px-5 py-2.5 font-bold text-[14px] text-slate-600 hover:text-slate-900">Log in</button>
+          <button onClick={() => onNavigate('/signup')} className="px-5 py-2.5 md:px-7 md:py-3 font-bold text-[13px] md:text-[14px] rounded-full transition-all bg-[#2ba37b] text-white hover:opacity-90 shadow-lg shadow-[#2ba37b]/20">Create account</button>
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="p-2 rounded-lg text-slate-800 hover:bg-black/5 transition-colors flex items-center justify-center lg:hidden"
@@ -55,7 +56,7 @@ const Header = ({ onNavigate }: { onNavigate: (path: string) => void }) => {
           <button onClick={() => { onNavigate('/pricing'); setMobileMenuOpen(false); }} className="text-2xl font-bold text-slate-900 py-4 border-b border-slate-50 text-left font-arimo">Pricing</button>
           <div className="mt-auto pb-12 flex flex-col gap-4">
              <button onClick={() => { onNavigate('/login'); setMobileMenuOpen(false); }} className="w-full py-4 font-bold text-slate-600 border border-slate-200 rounded-2xl font-arimo">Log in</button>
-             <button onClick={() => { onNavigate('/signup'); setMobileMenuOpen(false); }} className="w-full py-4 font-bold bg-[#2ba37b] text-white rounded-2xl shadow-xl shadow-[#2ba37b]/20 font-arimo">Sign up</button>
+             <button onClick={() => { onNavigate('/signup'); setMobileMenuOpen(false); }} className="w-full py-4 font-bold bg-[#2ba37b] text-white rounded-2xl shadow-xl shadow-[#2ba37b]/20 font-arimo">Create account</button>
           </div>
         </div>
       )}
@@ -63,42 +64,29 @@ const Header = ({ onNavigate }: { onNavigate: (path: string) => void }) => {
   );
 };
 
-const FeatureSection = ({ title, description, category, reverse = false }: any) => {
-  return (
-    <section className="py-32 bg-white">
-      <div className={`max-w-[1400px] mx-auto px-8 md:px-12 lg:px-24 flex flex-col md:flex-row ${reverse ? 'md:flex-row-reverse' : ''} items-center gap-20 lg:gap-32`}>
-        <div className="flex-1 space-y-8 text-left">
-          <h2 className="text-4xl lg:text-5xl font-extrabold text-slate-900 leading-[1.1] tracking-tight">{title}</h2>
-          <p className="text-xl text-slate-500 leading-relaxed font-medium max-w-2xl">{description}</p>
-          <button className="text-[#2ba37b] font-bold text-[17px] flex items-center gap-4 group">
-            Explore {category.toLowerCase()} suite <svg className="w-5 h-5 transition-transform group-hover:translate-x-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-          </button>
-        </div>
-        <div className="flex-1 flex justify-center items-center w-full">
-          <div className="relative group w-full max-w-[400px]">
-            <div className="absolute -inset-16 bg-emerald-100 rounded-[120px] blur-[100px] opacity-25 group-hover:opacity-40 transition-opacity"></div>
-            <div className="bg-white border border-slate-200 rounded-[40px] shadow-2xl p-10 w-full max-w-[400px] relative pointer-events-none select-none mx-auto">
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-2 h-2 rounded-full bg-red-500"></div>
-                <h4 className="text-[13px] font-bold text-slate-400 uppercase tracking-widest">{category}</h4>
-              </div>
-              <div className="space-y-4 mb-10">
-                <div className="text-red-500/50 line-through text-xl font-medium">Original text error</div>
-                <div className="text-emerald-600 font-extrabold text-3xl">Perfect suggestion</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
 const FAQSection = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const faqs = [
-    { q: "What is grammar checking?", a: "Grammar checking is the process of automatically identifying and correcting grammatical errors in written text. Modern tools use advanced AI to detect nuances that go beyond simple rules." },
-    { q: "What does a grammar checker do?", a: "A grammar checker scans your text for mistakes in punctuation, spelling, syntax, and style. It then provides suggestions for improvements." }
+    { 
+      q: "How accurate is Outparse's grammar checking?", 
+      a: "Outparse uses advanced AI models with 99% accuracy for common grammar errors. It continuously learns from user corrections and updates to improve its suggestions." 
+    },
+    { 
+      q: "What types of documents can I check?", 
+      a: "You can check essays, reports, emails, blog posts, academic papers, business documents, and more. Outparse supports various formats including plain text and will soon support document uploads." 
+    },
+    { 
+      q: "Is my content private and secure?", 
+      a: "Yes, we take privacy seriously. Your content is encrypted in transit and at rest. We don't store your text for longer than needed to provide the service, and we never use your content for training without explicit permission." 
+    },
+    { 
+      q: "What languages are supported?", 
+      a: "Currently, we support English (US, UK, AU, and CA variants) with plans to add Spanish, French, German, and other major languages in upcoming updates." 
+    },
+    { 
+      q: "What AI technology does Outparse use?", 
+      a: "Outparse uses Google's Gemini AI combined with custom NLP models specifically trained for grammar correction. This combination provides both accuracy and context-aware suggestions." 
+    }
   ];
 
   return (
@@ -125,28 +113,123 @@ const FAQSection = () => {
   );
 };
 
-const Footer = ({ onNavigate }: { onNavigate: (path: string) => void }) => (
-  <footer className="bg-white text-slate-900 pt-32 pb-12 border-t border-slate-100">
-    <div className="max-w-[1400px] mx-auto px-8 md:px-12 lg:px-24">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-32">
-        <div className="space-y-6">
-          <div className="flex items-center gap-2">
-            <svg className="w-6 h-6 text-black" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 3L14.5 8.5L20 11L14.5 13.5L12 19L9.5 13.5L4 11L9.5 8.5L12 3Z" />
-              <path d="M5 3L6 5L8 6L6 7L5 9L4 7L2 6L4 5L5 3Z" />
-              <path d="M19 15L20 17L22 18L20 19L19 21L18 19L16 18L18 17L19 15Z" />
-            </svg>
-            <span className="text-xl font-bold">outparse</span>
+const Footer = ({ onNavigate }: { onNavigate: (path: string) => void }) => {
+  const [openSection, setOpenSection] = useState<string | null>(null);
+
+  const toggleSection = (section: string) => {
+    setOpenSection(openSection === section ? null : section);
+  };
+
+  const sections = {
+    newsletter: (
+      <div className="space-y-4">
+        <input 
+          type="email" 
+          placeholder="Your email address" 
+          className="w-full px-5 py-3 rounded-full border border-slate-200 focus:outline-none focus:border-emerald-500 transition-colors text-sm"
+        />
+        <button className="w-full py-3 bg-[#2ba37b] text-white font-bold rounded-full hover:opacity-90 transition-opacity">
+          Subscribe
+        </button>
+        <p className="text-[11px] text-slate-400 leading-relaxed">
+          By subscribing, you agree to our Privacy Policy and consent to receive updates from our company.
+        </p>
+      </div>
+    ),
+    features: (
+      <ul className="space-y-4 text-sm text-slate-500 font-medium">
+        <li><button className="hover:text-slate-900">Grammar Checker</button></li>
+        <li><button className="hover:text-slate-900">Word Counter</button></li>
+        <li><button className="hover:text-slate-900">Translator</button></li>
+        <li><button className="hover:text-slate-900">Word Puzzle</button></li>
+        <li><button className="hover:text-slate-900">Vocabulary Builder</button></li>
+        <li><button className="hover:text-slate-900">Crossword</button></li>
+        <li><button className="hover:text-slate-900">Spell Checker</button></li>
+      </ul>
+    ),
+    company: (
+      <ul className="space-y-4 text-sm text-slate-500 font-medium">
+        <li><button onClick={() => onNavigate('/about-us')} className="hover:text-slate-900">About Us</button></li>
+        <li><button className="hover:text-slate-900">Contact Us</button></li>
+        <li><button className="hover:text-slate-900">Privacy Policy</button></li>
+        <li><button className="hover:text-slate-900">Terms of Service</button></li>
+      </ul>
+    ),
+    connect: (
+      <ul className="space-y-4 text-sm text-slate-500 font-medium">
+        <li><button className="hover:text-slate-900">Facebook</button></li>
+        <li><button className="hover:text-slate-900">Instagram</button></li>
+        <li><button className="hover:text-slate-900">LinkedIn</button></li>
+        <li><button className="hover:text-slate-900">Twitter</button></li>
+        <li><button className="hover:text-slate-900">YouTube</button></li>
+      </ul>
+    )
+  };
+
+  return (
+    <footer className="bg-white text-slate-900 pt-32 pb-12 border-t border-slate-100">
+      <div className="max-w-[1400px] mx-auto px-8 md:px-12 lg:px-24">
+        {/* Desktop View */}
+        <div className="hidden md:grid grid-cols-4 gap-12 mb-32">
+          <div className="space-y-6">
+            <h4 className="text-[17px] font-bold text-slate-900">Newsletter</h4>
+            {sections.newsletter}
           </div>
-          <p className="text-slate-600 text-sm font-medium">Sophisticated editorial tools for professional precision.</p>
+          <div className="space-y-6">
+            <h4 className="text-[17px] font-bold text-slate-900">Features</h4>
+            {sections.features}
+          </div>
+          <div className="space-y-6">
+            <h4 className="text-[17px] font-bold text-slate-900">Company</h4>
+            {sections.company}
+          </div>
+          <div className="space-y-6">
+            <h4 className="text-[17px] font-bold text-slate-900">Connect</h4>
+            {sections.connect}
+          </div>
+        </div>
+
+        {/* Mobile Accordion View */}
+        <div className="md:hidden space-y-2 mb-20">
+          {[
+            { id: 'newsletter', title: 'Newsletter' },
+            { id: 'features', title: 'Features' },
+            { id: 'company', title: 'Company' },
+            { id: 'connect', title: 'Connect' }
+          ].map((item) => (
+            <div key={item.id} className="border-b border-slate-100">
+              <button 
+                onClick={() => toggleSection(item.id)}
+                className="w-full py-6 flex items-center justify-between text-left"
+              >
+                <span className="text-lg font-bold text-slate-900">{item.title}</span>
+                <svg 
+                  className={`w-5 h-5 transition-transform duration-300 ${openSection === item.id ? 'rotate-180' : ''}`} 
+                  fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}
+                >
+                  <path d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <div className={`overflow-hidden transition-all duration-300 ${openSection === item.id ? 'max-h-[400px] pb-8' : 'max-h-0'}`}>
+                {sections[item.id as keyof typeof sections]}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="pt-12 border-t border-slate-100 flex flex-col md:flex-row items-center justify-between gap-6">
+          <p className="text-[13px] font-medium text-slate-400 order-2 md:order-1">
+            © 2026 Outparse. All rights reserved.
+          </p>
+          <div className="flex items-center gap-6 order-1 md:order-2">
+            <button className="text-[13px] font-bold text-blue-600 hover:underline">Sitemap</button>
+            <button className="text-[13px] font-bold text-blue-600 hover:underline">LLM.txt</button>
+          </div>
         </div>
       </div>
-      <div className="pt-12 border-t border-slate-100 flex items-center justify-between">
-        <p className="text-[12px] font-bold text-slate-400">© 2024 Outparse Suite. All rights reserved.</p>
-      </div>
-    </div>
-  </footer>
-);
+    </footer>
+  );
+};
 
 const App: React.FC = () => {
   const [currentPath, setCurrentPath] = useState(window.location.pathname);
@@ -184,13 +267,11 @@ const App: React.FC = () => {
     const newText = inputText.substring(0, s.index) + s.replacement + inputText.substring(s.index + s.original.length);
     setInputText(newText);
     
-    // SENIOR PRACTICE: Update existing suggestions to match new indices
     if (result) {
       const diff = s.replacement.length - s.original.length;
       const updatedSuggestions = result.suggestions
-        .filter(item => item.id !== s.id) // Remove applied one
+        .filter(item => item.id !== s.id)
         .map(item => {
-          // If suggestion was after the current one, shift its index
           if (item.index > s.index) {
             return { ...item, index: item.index + diff };
           }
@@ -215,23 +296,23 @@ const App: React.FC = () => {
       <Header onNavigate={handleNavigate} />
       <main className="flex-1">
         <section style={heroBgStyle} className="pt-48 pb-32">
-          <div className="max-w-[1400px] mx-auto px-8 md:px-12 lg:px-24 flex flex-col items-center gap-16">
-            <div className="text-center space-y-6 reveal max-w-4xl">
+          <div className="max-w-[1400px] mx-auto px-8 md:px-12 lg:px-24 flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20">
+            <div className="text-left space-y-6 reveal flex-1 lg:max-w-[45%]">
               <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 tracking-tighter leading-tight font-arimo">
                 Grammar checking
               </h1>
-              <p className="text-slate-600/80 text-xl font-medium leading-relaxed max-w-2xl mx-auto font-arimo">
+              <p className="text-slate-600/80 text-xl font-medium leading-relaxed font-arimo">
                 Use Outparse to improve your writing, catch mistakes, and use best practices to write like a pro.
               </p>
             </div>
-            <div className="w-full max-w-5xl reveal delay-1">
+            <div className="w-full flex-1 reveal delay-1 lg:max-w-[50%]">
               <div className={`rounded-[25px] overflow-hidden shadow-2xl transition-all duration-300 ${isLoading ? 'check-gradient-border' : ''}`}>
                 <div className={`${isLoading ? 'check-gradient-inner rounded-[22px]' : ''}`}>
                   <Editor 
                     value={inputText} onChange={(val) => { setInputText(val); if(result) setResult(null); }} 
                     isLoading={isLoading} 
                     credits={credits}
-                    onPaste={() => navigator.clipboard.readText().then(setInputText)}
+                    onUploadDoc={() => alert("Document upload coming soon!")}
                     onTrySample={() => setInputText(SAMPLE_TEXT)}
                     suggestions={result?.suggestions || []}
                     tone={tone} onToneChange={setTone}
@@ -244,10 +325,6 @@ const App: React.FC = () => {
             </div>
           </div>
         </section>
-        <div className="space-y-12 bg-white">
-          <FeatureSection title="Eliminate grammar mistakes instantly" description="Catch errors as you write." category="Grammar" />
-          <FeatureSection title="Refine your style" description="Write with confidence." category="Style" reverse={true} />
-        </div>
         <FAQSection />
       </main>
       <Footer onNavigate={handleNavigate} />

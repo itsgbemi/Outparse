@@ -7,7 +7,7 @@ interface EditorProps {
   onChange: (val: string) => void;
   isLoading: boolean;
   credits: number;
-  onPaste: () => void;
+  onUploadDoc: () => void;
   onTrySample: () => void;
   suggestions: Suggestion[];
   tone: EditorialTone;
@@ -17,8 +17,16 @@ interface EditorProps {
   onFixGrammar: () => void;
 }
 
+const Tooltip: React.FC<{ text: string; visible: boolean }> = ({ text, visible }) => (
+  <div className={`absolute top-full mt-2 left-1/2 -translate-x-1/2 transition-all duration-200 pointer-events-none z-[80] ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-1'}`}>
+    <div className="bg-white border border-slate-200 text-slate-800 px-3 py-1 rounded-full text-[11px] font-bold shadow-sm whitespace-nowrap">
+      {text}
+    </div>
+  </div>
+);
+
 const Editor: React.FC<EditorProps> = ({ 
-  value, onChange, isLoading, credits, onPaste, onTrySample, suggestions, tone, onToneChange, 
+  value, onChange, isLoading, credits, onUploadDoc, onTrySample, suggestions, tone, onToneChange, 
   onApplySuggestion, onIgnoreSuggestion, onFixGrammar 
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -27,9 +35,11 @@ const Editor: React.FC<EditorProps> = ({
   const [popoverPos, setPopoverPos] = useState({ top: 0, left: 0 });
   const [copied, setCopied] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [hoveredBtn, setHoveredBtn] = useState<string | null>(null);
 
   const handleCopy = async () => {
     if (!value) return;
+    // Fix: navigator.clipboard.readText() takes no arguments. To copy text, use writeText(text).
     await navigator.clipboard.writeText(value);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -77,7 +87,6 @@ const Editor: React.FC<EditorProps> = ({
 
   const toneOptions: EditorialTone[] = ['Professional', 'Casual', 'Academic', 'Creative', 'Urgent'];
 
-  // SENIOR PRACTICE: Share CSS variables to ensure pixel-perfect sync
   const sharedStyles: React.CSSProperties = {
     fontFamily: "'Arimo', sans-serif",
     fontSize: '18px',
@@ -88,6 +97,8 @@ const Editor: React.FC<EditorProps> = ({
     wordSpacing: 'normal',
     textTransform: 'none',
   };
+
+  const hasText = value.length > 0;
 
   return (
     <div className="flex flex-col min-h-[500px] bg-white rounded-t-[25px] relative font-arimo">
@@ -104,29 +115,52 @@ const Editor: React.FC<EditorProps> = ({
           <span className="text-[13px] font-black text-slate-900 tracking-tight">{credits} credits</span>
         </div>
         <div className="flex items-center gap-1">
-          <button 
-            onClick={handleCopy} 
-            disabled={!value || isLoading}
-            className={`p-2 transition-colors ${!value || isLoading ? 'text-slate-200 cursor-not-allowed' : 'text-slate-900 hover:text-emerald-600'}`}
-          >
-            {copied ? (
-              <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path fillRule="evenodd" clipRule="evenodd" d="M12 2.75C6.89137 2.75 2.75 6.89137 2.75 12C2.75 17.1086 6.89137 21.25 12 21.25C17.1086 21.25 21.25 17.1086 21.25 12C21.25 6.89137 17.1086 2.75 12 2.75ZM1.25 12C1.25 6.06294 6.06294 1.25 12 1.25C17.9371 1.25 22.75 6.06294 22.75 12C22.75 17.9371 17.9371 22.75 12 22.75C6.06294 22.75 1.25 17.9371 1.25 12Z" fill="#10b981"></path>
+          <div className="relative">
+            <button 
+              onClick={handleCopy} 
+              onMouseEnter={() => setHoveredBtn('copy')}
+              onMouseLeave={() => setHoveredBtn(null)}
+              disabled={!hasText || isLoading}
+              className={`p-2 transition-colors ${!hasText || isLoading ? 'text-slate-200 cursor-not-allowed' : 'text-slate-900 hover:text-emerald-600'}`}
+            >
+              {copied ? (
+                <svg viewBox="0 0 24 24" className="w-6 h-6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <g id="style=stroke">
+                    <g id="check-circle">
+                      <path id="vector (Stroke)" fillRule="evenodd" clipRule="evenodd" d="M12 2.75C6.89137 2.75 2.75 6.89137 2.75 12C2.75 17.1086 6.89137 21.25 12 21.25C17.1086 21.25 21.25 17.1086 21.25 12C21.25 6.89137 17.1086 2.75 12 2.75ZM1.25 12C1.25 6.06294 6.06294 1.25 12 1.25C17.9371 1.25 22.75 6.06294 22.75 12C22.75 17.9371 17.9371 22.75 12 22.75C6.06294 22.75 1.25 17.9371 1.25 12Z" fill="#2ba37b"></path>
+                      <path id="vector (Stroke)_2" fillRule="evenodd" clipRule="evenodd" d="M16.5303 8.96967C16.8232 9.26256 16.8232 9.73744 16.5303 10.0303L11.9041 14.6566C11.2207 15.34 10.1126 15.34 9.42923 14.6566L7.46967 12.697C7.17678 12.4041 7.17678 11.9292 7.46967 11.6363C7.76256 11.3434 8.23744 11.3434 8.53033 11.6363L10.4899 13.5959C10.5875 13.6935 10.7458 13.6935 10.8434 13.5959L15.4697 8.96967C15.7626 8.67678 16.2374 8.67678 16.5303 8.96967Z" fill="#2ba37b"></path>
+                    </g>
+                  </g>
+                </svg>
+              ) : (
+                <svg fill="currentColor" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" focusable="false" style={{ display: 'block' }}>
+                  <path d="M5.5 4.63V17.25c0 1.8 1.46 3.25 3.25 3.25h8.62c-.31.88-1.15 1.5-2.13 1.5H8.75A4.75 4.75 0 014 17.25V6.75c0-.98.63-1.81 1.5-2.12zM17.75 2C18.99 2 20 3 20 4.25v13c0 1.24-1 2.25-2.25 2.25h-9c-1.24 0-2.25-1-2.25-2.25v-13C6.5 3.01 7.5 2 8.75 2h9zm0 1.5h-9a.75.75 0 00-.75.75v13c0 .41.34.75.75.75h9c.41 0 .75-.34.75-.75v-13a.75.75 0 00-.75-.75z" fill="currentColor"></path>
+                </svg>
+              )}
+            </button>
+            <Tooltip text={copied ? "Copied!" : "Copy text"} visible={hoveredBtn === 'copy'} />
+          </div>
+
+          <div className="relative">
+            <button 
+              onClick={() => onChange('')} 
+              onMouseEnter={() => setHoveredBtn('delete')}
+              onMouseLeave={() => setHoveredBtn(null)}
+              disabled={!hasText || isLoading}
+              className={`p-2 transition-colors ${!hasText || isLoading ? 'text-slate-200 cursor-not-allowed' : 'text-slate-900 hover:text-red-500'}`}
+            >
+              <svg fill="currentColor" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" focusable="false" style={{ display: 'block' }}>
+                <path d="M10 5h4a2 2 0 10-4 0zM8.5 5a3.5 3.5 0 117 0h5.75a.75.75 0 010 1.5h-1.32l-1.17 12.11A3.75 3.75 0 0115.03 22H8.97a3.75 3.75 0 01-3.73-3.39L4.07 6.5H2.75a.75.75 0 010-1.5H8.5zm2 4.75a.75.75 0 00-1.5 0v7.5a.75.75 0 001.5 0v-7.5zM14.25 9c.41 0 .75.34.75.75v7.5a.75.75 0 01-1.5 0v-7.5c0-.41.34-.75.75-.75zm-7.52 9.47a2.25 2.25 0 002.24 2.03h6.06c1.15 0 2.12-.88 2.24-2.03L18.42 6.5H5.58l1.15 11.97z" fill="currentColor"></path>
               </svg>
-            ) : (
-              <svg fill="currentColor" width="24" height="24" viewBox="0 0 24 24"><path d="M5.5 4.63V17.25c0 1.8 1.46 3.25 3.25 3.25h8.62c-.31.88-1.15 1.5-2.13 1.5H8.75A4.75 4.75 0 014 17.25V6.75c0-.98.63-1.81 1.5-2.12zM17.75 2C18.99 2 20 3 20 4.25v13c0 1.24-1 2.25-2.25 2.25h-9c-1.24 0-2.25-1-2.25-2.25v-13C6.5 3.01 7.5 2 8.75 2h9z"></path></svg>
-            )}
-          </button>
-          <button 
-            onClick={() => onChange('')} 
-            disabled={!value || isLoading}
-            className={`p-2 transition-colors ${!value || isLoading ? 'text-slate-200 cursor-not-allowed' : 'text-slate-900 hover:text-red-500'}`}
-          >
-            <svg fill="currentColor" width="24" height="24" viewBox="0 0 24 24"><path d="M10 5h4a2 2 0 10-4 0zM8.5 5a3.5 3.5 0 117 0h5.75a.75.75 0 010 1.5h-1.32l-1.17 12.11A3.75 3.75 0 0115.03 22H8.97a3.75 3.75 0 01-3.73-3.39L4.07 6.5H2.75a.75.75 0 010-1.5H8.5z"></path></svg>
-          </button>
+            </button>
+            <Tooltip text="Clear text" visible={hoveredBtn === 'delete'} />
+          </div>
+
           <div className="relative">
             <button 
               onClick={() => setShowSettings(!showSettings)}
+              onMouseEnter={() => setHoveredBtn('settings')}
+              onMouseLeave={() => setHoveredBtn(null)}
               className="p-2 text-slate-900 hover:opacity-70 transition-colors"
             >
               <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
@@ -135,6 +169,8 @@ const Editor: React.FC<EditorProps> = ({
                 <circle cx="12" cy="19" r="2" />
               </svg>
             </button>
+            <Tooltip text="Settings" visible={hoveredBtn === 'settings'} />
+            
             {showSettings && (
               <div className="absolute top-full right-0 mt-2 w-56 bg-white border border-slate-100 shadow-2xl rounded-2xl p-4 z-[70] animate-in fade-in zoom-in-95">
                 <div className="space-y-4">
@@ -160,7 +196,6 @@ const Editor: React.FC<EditorProps> = ({
       </div>
 
       <div className="flex-1 relative bg-white overflow-hidden min-h-[400px]">
-        {/* PIXEL PERFECT BACKDROP */}
         <div 
           ref={backdropRef} 
           style={sharedStyles}
@@ -169,7 +204,6 @@ const Editor: React.FC<EditorProps> = ({
           {renderHighlightedText()}
         </div>
         
-        {/* TEXTAREA WITH IDENTICAL STYLES */}
         <textarea
           ref={textareaRef}
           value={value}
@@ -184,11 +218,25 @@ const Editor: React.FC<EditorProps> = ({
 
         {!value && (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 pointer-events-none">
-            <button onClick={onTrySample} className="pointer-events-auto flex items-center gap-3 px-8 py-3 bg-white border border-slate-200 rounded-full text-sm font-bold text-slate-600 hover:bg-slate-50 transition-all shadow-sm">
+            <button 
+              onClick={onTrySample} 
+              className="pointer-events-auto flex items-center gap-3 px-8 py-3 bg-white border border-slate-200 rounded-full text-sm font-bold text-slate-600 hover:bg-slate-50 transition-all shadow-sm"
+            >
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 10C3 6.22876 3 4.34315 4.17157 3.17157C5.34315 2 7.22876 2 11 2H13C16.7712 2 18.6569 2 19.8284 3.17157C21 4.34315 21 6.22876 21 10V14C21 17.7712 21 19.6569 19.8284 20.8284C18.6569 22 16.7712 22 13 22H11C7.22876 22 5.34315 22 4.17157 20.8284C3 19.6569 3 17.7712 3 14V10Z" stroke="#1C274C" strokeWidth="1.5"></path>
+                <path d="M8 10H16" stroke="#1C274C" strokeWidth="1.5" strokeLinecap="round"></path>
+                <path d="M8 14H13" stroke="#1C274C" strokeWidth="1.5" strokeLinecap="round"></path>
+              </svg>
               Try sample text
             </button>
-            <button onClick={onPaste} className="pointer-events-auto flex items-center gap-3 px-8 py-3 bg-white border border-slate-200 rounded-full text-sm font-bold text-slate-600 hover:bg-slate-50 transition-all shadow-sm">
-              Paste text
+            <button 
+              onClick={onUploadDoc} 
+              className="pointer-events-auto flex items-center gap-3 px-8 py-3 bg-white border border-slate-200 rounded-full text-sm font-bold text-slate-600 hover:bg-slate-50 transition-all shadow-sm"
+            >
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13 3H8.2C7.0799 3 6.51984 3 6.09202 3.21799C5.71569 3.40973 5.40973 3.71569 5.21799 4.09202C5 4.51984 5 5.0799 5 6.2V17.8C5 18.9201 5 19.4802 5.21799 19.908C5.40973 20.2843 5.71569 20.5903 6.09202 20.782C6.51984 21 7.0799 21 8.2 21H12M13 3L19 9M13 3V7.4C13 7.96005 13 8.24008 13.109 8.45399C13.2049 8.64215 13.3578 8.79513 13.546 8.89101C13.7599 9 14.0399 9 14.6 9H19M19 9V10M15 19H21M18 16V22" stroke="#1C274C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              Upload doc
             </button>
           </div>
         )}
