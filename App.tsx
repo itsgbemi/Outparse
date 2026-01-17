@@ -132,7 +132,7 @@ const Footer = ({ onNavigate }: { onNavigate: (path: string) => void }) => {
           Subscribe
         </button>
         <p className="text-[11px] text-slate-400 leading-relaxed">
-          By subscribing, you agree to our Privacy Policy and consent to receive updates from our company.
+          By subscribing, you agree to our <a href="/privacy-policy" className="underline hover:text-slate-600">Privacy Policy</a> and consent to receive updates from our company.
         </p>
       </div>
     ),
@@ -170,9 +170,9 @@ const Footer = ({ onNavigate }: { onNavigate: (path: string) => void }) => {
     <footer className="bg-white text-slate-900 pt-32 pb-12 border-t border-slate-100">
       <div className="max-w-[1400px] mx-auto px-8 md:px-12 lg:px-24">
         {/* Desktop View */}
-        <div className="hidden md:grid grid-cols-4 gap-12 mb-32">
-          <div className="space-y-6">
-            <h4 className="text-[17px] font-bold text-slate-900">Newsletter</h4>
+        <div className="hidden md:grid md:grid-cols-5 gap-12 mb-32">
+          <div className="md:col-span-2 space-y-6">
+            <h4 className="text-[17px] font-bold text-slate-900">Sign up for writing tips and product updates</h4>
             {sections.newsletter}
           </div>
           <div className="space-y-6">
@@ -192,7 +192,7 @@ const Footer = ({ onNavigate }: { onNavigate: (path: string) => void }) => {
         {/* Mobile Accordion View */}
         <div className="md:hidden space-y-2 mb-20">
           {[
-            { id: 'newsletter', title: 'Newsletter' },
+            { id: 'newsletter', title: 'Sign up for writing tips and product updates' },
             { id: 'features', title: 'Features' },
             { id: 'company', title: 'Company' },
             { id: 'connect', title: 'Connect' }
@@ -312,7 +312,7 @@ const App: React.FC = () => {
                     value={inputText} onChange={(val) => { setInputText(val); if(result) setResult(null); }} 
                     isLoading={isLoading} 
                     credits={credits}
-                    onUploadDoc={() => alert("Document upload coming soon!")}
+                    onUploadDoc={() => {}} // This is handled within Editor.tsx via file input
                     onTrySample={() => setInputText(SAMPLE_TEXT)}
                     suggestions={result?.suggestions || []}
                     tone={tone} onToneChange={setTone}

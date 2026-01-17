@@ -31,6 +31,7 @@ const Editor: React.FC<EditorProps> = ({
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const backdropRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [activeSuggestion, setActiveSuggestion] = useState<Suggestion | null>(null);
   const [popoverPos, setPopoverPos] = useState({ top: 0, left: 0 });
   const [copied, setCopied] = useState(false);
@@ -39,10 +40,35 @@ const Editor: React.FC<EditorProps> = ({
 
   const handleCopy = async () => {
     if (!value) return;
-    // Fix: navigator.clipboard.readText() takes no arguments. To copy text, use writeText(text).
     await navigator.clipboard.writeText(value);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.name.endsWith('.docx')) {
+      try {
+        const mammoth = await import("https://esm.sh/mammoth");
+        const arrayBuffer = await file.arrayBuffer();
+        const result = await mammoth.extractRawText({ arrayBuffer });
+        onChange(result.value.slice(0, 2000));
+      } catch (err) {
+        console.error("Error reading docx", err);
+        alert("Failed to read .docx file. Please try a .txt file.");
+      }
+    } else {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const content = event.target?.result as string;
+        onChange(content.slice(0, 2000));
+      };
+      reader.readAsText(file);
+    }
+    // Reset file input
+    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
   const handleEditorClick = (e: any) => {
@@ -230,7 +256,7 @@ const Editor: React.FC<EditorProps> = ({
               Try sample text
             </button>
             <button 
-              onClick={onUploadDoc} 
+              onClick={() => fileInputRef.current?.click()} 
               className="pointer-events-auto flex items-center gap-3 px-8 py-3 bg-white border border-slate-200 rounded-full text-sm font-bold text-slate-600 hover:bg-slate-50 transition-all shadow-sm"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -238,6 +264,13 @@ const Editor: React.FC<EditorProps> = ({
               </svg>
               Upload doc
             </button>
+            <input 
+              type="file" 
+              ref={fileInputRef} 
+              className="hidden" 
+              accept=".txt,.md,.doc,.docx" 
+              onChange={handleFileChange} 
+            />
           </div>
         )}
 
